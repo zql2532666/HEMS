@@ -1,0 +1,5 @@
+# File to configure DB connection
+mysql_host: 'localhost'
+mysql_user: 'aaron'
+mysql_password: 'aaron'
+mysql_db: 'assignmentdatabase'

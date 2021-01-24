@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block mainContent %}
+
+    <!-- Alert after adding node -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div id="progress" class="progress" hidden style="margin-bottom: 2%; height:20px;">
+        <div class="progress-bar" style="min-width: 20px; width: 2%;">
+            25s
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-secondary">
+            <div class="card-header">
+              <h3 class="card-title">Set Alarm</h3>
+            </div>
+            <form id="nodeForm" action="setAlarm" method="POST">
+              <div class="card-body">
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label for="alarm-time">Time Set</label>
+                    <input id="alarm-time" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label for="time">Time</label>
+                    <input id="time" type="text" class="form-control" name="time" required>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                <button id="submitbtn" type="submit" class="btn btn-primary">Set</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}
+{% block script %}
+<script>
+    $(function() {
+        $('#time').daterangepicker({
+                 timePicker : true,
+                 singleDatePicker:true,
+                 timePicker24Hour : true,
+                 timePickerIncrement : 1,
+                 timePickerSeconds : true,
+                 locale : {
+                     format : 'HH:mm:ss'
+                 }
+             }).on('show.daterangepicker', function(ev, picker) {
+                 picker.container.find(".calendar-table").hide();
+        });
+
+        $.ajax({
+          url: '/api/v1/alarm',
+          type: 'GET',
+          success: function(result) {
+            if(result != "None"){
+              $("#alarm-time").val(result)
+            }else {
+              $("#alarm-time").val("Not Set")
+            }
+          }
+        });
+    });
+</script>
+{% endblock %}

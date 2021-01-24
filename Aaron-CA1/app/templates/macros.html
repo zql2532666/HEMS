@@ -1,0 +1,24 @@
+<!-- Macro for dynamic sidebar menu -->
+{% macro nav_link(endpoint, name, icon, badge, colour) %}
+{% if request.endpoint == endpoint %}
+  <a href="{{ url_for(endpoint) }}" class="nav-link active">
+    <i class="{{icon}} nav-icon"></i>
+    <p>
+      {{name}}
+      {% if badge %}
+        <span class="right badge {{colour}}">{{badge}}</span>
+      {% endif %}
+    </p>
+  </a>
+{% else %}
+  <a href="{{ url_for(endpoint) }}" class="nav-link">
+    <i class="{{icon}} nav-icon"></i>
+    <p>
+      {{name}}
+      {% if badge %}
+        <span class="right badge {{colour}}">{{badge}}</span>
+      {% endif %}
+    </p>
+  </a>
+{% endif %}
+{% endmacro %}
