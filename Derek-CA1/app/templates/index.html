@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body current">
+                    <h3 style="font-size: 30px;">Real Time Sensor Values</h3>
+                    <p style="font-size: 20px;"><b>Temperature:</b> <span id="realTimeTemp"
+                            style="font-size: 20px;">fetching ...</span></p>
+                    <p style="font-size: 20px;"><b>Humidity:</b> <span id="realTimeHumidity"
+                            style="font-size: 20px;">fetching ...</span></p>
+                    <p style="font-size: 20px;"><b>Light:</b> <span id="realTimeLight" style="font-size: 20px;">fetching ...</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body current">
+                    <h3 style="font-size: 30px;">LCD Display</h3>
+                    <p>Select what to display on the LCD ... </p>
+                    <button onclick="processLCD(this.id)" type="button" class="btn btn-light btn-lg" id="lcd-dht11">
+                        Temperature & Humidity
+                    </button>
+                    <button onclick="processLCD(this.id)" type="button" class="btn btn-light btn-lg" id="lcd-light">
+                        Light
+                    </button>
+                    <button onclick="processLCD(this.id)" type="button" class="btn btn-light btn-lg" id="lcd-none">
+                        None
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body current">
+                    <div style="width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;">
+                        <button onclick="" type="button" class="btn btn-light btn-lg" id="lcd-dht11">
+                            Start Sensors
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div style="margin-top: 80px;">
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body current">
+                        <h3 style="font-size: 25px;">Notification Threshold</h3>
+                        <p style="font-size: 20px;"><b>Temperature: </b> <span id="currentTemp"
+                                style="font-size: 20px;">0&deg;C</span></p>
+                        <input type="text" id="updateTemp" name="updateTemp"
+                            placeholder="update temperature ..."><br><br>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body current">
+                        <h3 style="font-size: 25px;">Notification Threshold</h3>
+                        <p style="font-size: 20px;"><b>Humidity:</b> <span id="currentHumidity"
+                                style="font-size: 20px;">0%</span></p>
+                        <input type="text" id="updateHumidity" name="updateHumidity"
+                            placeholder="update humidity..."><br><br>
+                        <!-- <button type="button" class="btn btn-success" id="updateHumidityBtn">Update</button> -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body current">
+                        <h3 style="font-size: 25px;">Notification Threshold</h3>
+                        <p style="font-size: 20px;"><b>Light: </b> <span id="currentLight"
+                                style="font-size: 20px;">0</span></p>
+                        <input type="text" id="updateLight" name="updateLight" placeholder="update light ..."><br><br>
+                        <!-- <button type="button" class="btn btn-success" id="updateLightBtn">Update</button> -->
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <!-- <div class="card">
+                    <div class="card-body current"> -->
+                <div style="width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;">
+
+                    <button type="button" onclick="modifyThreshold()" class="btn btn-outline-success"
+                        id="updateTempBtn">Update</button>
+                </div>
+                <!-- </div>
+                </div> -->
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+    </div>
+    <script>
+
+        function callAPIRealTimeSensorData() {
+            var returnData = {}
+            console.log("Calling updateRealTime Sensor Data");
+            $.ajax({
+                url: "/api/v1/realtime_sensors_data",
+                async: false,
+                success: function (results) {
+                    console.log(results);
+                    returnData = results
+                },
+                type: 'GET'
+            });
+            return returnData
+        }
+
+        function displayRealTimeSensorData(data) {
+            document.getElementById("realTimeTemp").innerHTML = data["temperature"] + "&deg;C";
+            document.getElementById("realTimeHumidity").innerHTML = data["humidity"] + "%";
+            document.getElementById("realTimeLight").innerHTML = data["light"];
+        }
+
+        function updateRealTimeSensorData() {
+            realTimeData = callAPIRealTimeSensorData();
+            displayRealTimeSensorData(realTimeData);
+        };
+
+        function processLCD(clickedBtnID) {
+            //alert(id);
+            // Turn the greenBtnID Green
+
+
+            var idArray = ["lcd-dht11", "lcd-light", "lcd-none"];
+            for (var i = 0; i < idArray.length; i++) {
+                if (idArray[i] == clickedBtnID) {
+                    console.log("id match")
+                    var clickedBtn = document.getElementById(clickedBtnID);
+                    clickedBtn.className = "btn btn-success btn-lg";
+                    clickedBtn.disabled = true;
+                } else {
+                    var btn = document.getElementById(idArray[i]);
+                    btn.className = "btn btn-light btn-lg";
+                    btn.disabled = false;
+                }
+            }
+            // var dht11Btn = document.getElementById("lcd-dht11");
+            // var lightBtn = document.getElementById("lcd-light");
+            // var noneBtn = document.getElementById("lcd-light");
+
+            if (clickedBtnID == "lcd-dht11") {
+                $.ajax({
+                    url: "/api/v1/lcd_display_dht11_data",
+                    async: false,
+                    success: function (results) {
+                        console.log(results);
+                    },
+                    type: 'GET'
+                });
+            } else if (clickedBtnID == "lcd-light") {
+                $.ajax({
+                    url: "/api/v1/lcd_display_light_data",
+                    async: false,
+                    success: function (results) {
+                        console.log(results);
+                    },
+                    type: 'GET'
+                });
+            } else if (clickedBtnID == "lcd-none") {
+                $.ajax({
+                    url: "/api/v1/lcd_stop_display",
+                    async: false,
+                    success: function (results) {
+                        console.log(results);
+                    },
+                    type: 'GET'
+                });
+            }
+
+        };
+
+        function callRetrieveThresholdAPI() {
+            var returnData;
+            $.ajax({
+                url: "/api/v1/threshold",
+                async: false,
+                success: function (results) {
+                    console.log(results);
+                    returnData = results
+                },
+                type: 'GET'
+            });
+            return returnData;
+        };
+
+        function callModifyThresholdAPI() {
+            console.log("call modify threashold api")
+            var data = {
+                "temperature": document.getElementById("updateTemp").value,
+                "humidity": document.getElementById("updateHumidity").value,
+                "light": document.getElementById("updateLight").value
+            }
+
+            data = JSON.stringify(data)
+
+            var myHeader = {
+                "Content-Type": "application/json"
+            };
+            $.ajax({
+                url: "api/v1/threshold",
+                type: "POST",
+                //contentType : 'text/json',
+                headers: myHeader,
+                data: data,
+                success: function (result) {
+                    console.log(result)
+
+                    console.log("done")
+                },
+                error: function (error) {
+                    alert(`Error ${error}`);
+                }
+            });
+        }
+
+        function modifyThreshold() {
+            callModifyThresholdAPI();
+            populateThresholdFields(callRetrieveThresholdAPI());
+        }
+        function populateThresholdFields(data) {
+            document.getElementById("currentTemp").innerHTML = data.temperature + "&deg;C";
+            document.getElementById("currentHumidity").innerHTML = data.humidity + "%";
+            document.getElementById("currentLight").innerHTML = data.light;
+
+            document.getElementById("updateTemp").value = data.temperature;
+            document.getElementById("updateHumidity").value = data.humidity;
+            document.getElementById("updateLight").value = data.light;
+        }
+
+        $(document).ready(function () {
+            populateThresholdFields(callRetrieveThresholdAPI());
+            setInterval(updateRealTimeSensorData, 1000 * 5);
+            processLCD("lcd-none")
+
+        });
+        // main()
+
+
+
+    </script>
+
+    {% endblock %}

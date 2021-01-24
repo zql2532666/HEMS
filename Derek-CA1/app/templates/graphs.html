@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body current">
+                    <h3 style="font-size: 35px;">Graphs</h3>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="tempChart" height="120"></canvas>
+                    <!-- <canvas id="tempChart"></canvas> -->
+                    <button onclick="updateTempChart()" type="button" id="updateTempBtn" class="btn btn-outline-primary"
+                        style="margin-top: 10px">Update Graph</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="humidityChart" height="120"></canvas>
+                    <!-- <canvas id="humidityChart"></canvas> -->
+                    <button onclick="updateHumidityChart()" type="button" id="updateHumidityBtn"
+                        class="btn btn-outline-primary" style="margin-top: 10px">Update Graph</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="lightChart" height="120"></canvas>
+                    <!-- <canvas id="lightChart"></canvas> -->
+                    <button onclick="updateLightChart()" type="button" id="updateLightBtn"
+                        class="btn btn-outline-primary" style="margin-top: 10px">Update Graph</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function callTemperatureHumidityDateAPI() {
+            var returnData = [];
+            console.log("Calling temp api func");
+            $.ajax({
+                url: "/api/v1/dht11_last_10",
+                async: false,
+                success: function (results) {
+                    console.log(results);
+                    returnData = results
+                },
+                type: 'GET'
+            });
+            return returnData
+        };
+
+        function callLightDateAPI() {
+            var returnData = [];
+            console.log("Calling light api func");
+            $.ajax({
+                url: "/api/v1/ldr_last_10",
+                async: false,
+                success: function (results) {
+                    console.log(results);
+                    returnData = results
+                },
+                type: 'GET'
+            });
+            return returnData
+        };
+
+        function parseDataForTempChart(dht11Data) {
+            var tempChartData = [];
+            for (var i = 0; i < dht11Data.length; i++) {
+                e = {
+                    t: new Date(dht11Data[i].date),
+                    y: dht11Data[i].temperature
+                }
+                tempChartData.push(e)
+            }
+            //console.log()
+            return tempChartData
+        };
+
+        function parseDataForHumidityChart(dht11Data) {
+            var humidityChartData = [];
+            for (var i = 0; i < dht11Data.length; i++) {
+                e = {
+                    t: new Date(dht11Data[i].date),
+                    y: dht11Data[i].humidity
+                }
+
+                humidityChartData.push(e)
+            }
+            return humidityChartData
+        };
+
+
+        function parseDataForLightChart(ldrData) {
+            var lightChartData = [];
+            for (var i = 0; i < ldrData.length; i++) {
+                e = {
+                    t: new Date(ldrData[i].date),
+                    y: ldrData[i].light
+                }
+
+                lightChartData.push(e)
+            }
+            return lightChartData
+        };
+
+        function getDateArray(data) {
+            dateArray = []
+            for (var i = 0; i < data.length; i++) {
+                dateArray.push(data[i]["t"])
+            }
+            return dateArray
+        }
+
+
+
+        function drawTempChart(tempChartData) {
+            //var ctx = document.getElementById("tempChart").getContext("2d");
+            var ctx_temp = document.getElementById("tempChart").getContext("2d");
+            var dateArray = getDateArray(tempChartData)
+            window.tempChart = new Chart(ctx_temp, {
+                type: 'line',
+                data: {
+                    // labels: [new Date("2015-3-15 13:3").toLocaleString(), new Date("2015-3-25 13:2").toLocaleString(), new Date("2015-4-25 14:12").toLocaleString()],
+                    //labels: [new Date("2015-4-25 10:3").toLocaleString(), new Date("2015-4-25 17:12").toLocaleString()],
+                    //labels: dateArray,
+                    datasets: [{
+                        label: 'Temperature (Celcius)',
+                        lineTension: 0,
+                        data: tempChartData,
+                        fill: false,
+                        //backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        backgroundColor: 'rgba(41, 241, 195, 1)',
+                        borderColor: [
+                            'rgba(255,99,132,1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time'
+                        }]
+                    }
+                }
+            });
+        };
+
+        function drawHumidityChart(humidityChartData) {
+            //var ctx = document.getElementById("humidityChart").getContext("2d");
+            var ctx_humidity = document.getElementById("humidityChart").getContext("2d");
+            var dateArray = getDateArray(humidityChartData);
+            window.humidityChart = new Chart(ctx_humidity, {
+                type: 'line',
+                data: {
+                    // labels: [new Date("2015-3-15 13:3").toLocaleString(), new Date("2015-3-25 13:2").toLocaleString(), new Date("2015-4-25 14:12").toLocaleString()],
+                    //labels: [new Date("2015-4-25 10:3").toLocaleString(), new Date("2015-4-25 17:12").toLocaleString()],\
+                    //labels: dateArray,
+                    datasets: [{
+                        label: 'Humidity (%)',
+                        lineTension: 0,
+                        data: humidityChartData,
+                        fill: false,
+                        // backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        backgroundColor: 'rgba(255,99,132,1)',
+                        borderColor: [
+                            //'rgba(255,99,132,1)',
+                            'rgba(41, 241, 195, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time'
+                        }]
+                    }
+                }
+            });
+        };
+
+
+        function drawLightChart(lightChartData) {
+            //var ctx = document.getElementById("lightChart").getContext("2d");
+            var ctx_light = document.getElementById("lightChart").getContext("2d");
+            var dateArray = getDateArray(lightChartData)
+            window.lightChart = new Chart(ctx_light, {
+                type: 'line',
+                data: {
+                    // labels: [new Date("2015-3-15 13:3").toLocaleString(), new Date("2015-3-25 13:2").toLocaleString(), new Date("2015-4-25 14:12").toLocaleString()],
+                    //labels: [new Date("2015-4-25 10:3").toLocaleString(), new Date("2015-4-25 17:12").toLocaleString()],
+                    datasets: [{
+                        label: 'Light',
+                        lineTension: 0,
+                        data: lightChartData,
+                        fill: false,
+                        backgroundColor: 'rgba(190, 144, 212,1)',
+                        borderColor: [
+                            //'rgba(255,99,132,1)',
+                            // 'rgba(41, 241, 195, 1)',
+                            'rgba(89, 171, 227, 1)'
+
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time'
+                        }]
+                    }
+                }
+            });
+        };
+
+
+        function updateTempChart() {
+            var dht11Data = callTemperatureHumidityDateAPI();
+            var tempChartData = parseDataForTempChart(dht11Data);
+            var dateArray = getDateArray(tempChartData)
+            // window.tempChart.data.datasets[0].data = tempChartData;
+            // window.tempChart.data.labels = dateArray;
+            window.tempChart.destroy()
+            drawTempChart(tempChartData);
+        };
+
+        function updateHumidityChart() {
+            var dht11Data = callTemperatureHumidityDateAPI();
+            var humidityChartData = parseDataForHumidityChart(dht11Data);
+            window.humidityChart.destroy()
+            drawHumidityChart(humidityChartData);
+            // window.humidityChart.data.datasets[0].data = humidityChartData
+            // window.humidityChart.data.labels = dateArray
+        };
+
+        function updateLightChart() {
+            var ldrData = callLightDateAPI();
+            var lightChartData = parseDataForLightChart(ldrData);
+            window.lightChart.destroy();
+            //window.lightChart.data.datasets[0].data = lightChartData
+            drawLightChart(lightChartData);
+        };
+
+
+
+
+
+        $(document).ready(function () {
+            var dht11Data = callTemperatureHumidityDateAPI();
+            var tempChartData;
+            var humidityChartData;
+            var lightChartData;
+            // if (dht11Data.length >= 0) {
+            tempChartData = parseDataForTempChart(dht11Data);
+            humidityChartData = parseDataForHumidityChart(dht11Data);
+            drawTempChart(tempChartData)
+            drawHumidityChart(humidityChartData)
+            // }
+            var ldrData = callLightDateAPI();
+            // if (ldrData.length >= 0) {
+            lightChartData = parseDataForLightChart(ldrData);
+            drawLightChart(lightChartData)
+            // }
+            setInterval(updateTempChart, 1000 * 15);
+            setInterval(updateHumidityChart, 1000 * 15);
+            setInterval(updateLightChart, 1000 * 15);
+
+
+        });
+        // main()
+
+
+
+    </script>
+
+    {% endblock %}

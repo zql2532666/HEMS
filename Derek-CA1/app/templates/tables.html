@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Light</h5>
+                    <div class="table-responsive">
+                        <table id="lightTable" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Light Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr>
+                                    <td>Tiger Nixon</td>
+                                    <td>System Architect</td>
+                                </tr>
+                                <tr>
+                                    <td>Garrett Winters</td>
+                                    <td>Accountant</td>
+                                </tr> -->
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <button onclick="window.tempHumidityTable.ajax.reload(null, false)" type="button"
+                        class="btn btn-outline-primary" style="margin-top: 10px">Refresh Table</button>
+
+                    <button type="button" onclick="deleteAllLightData()" class="btn btn-outline-danger"
+                        style="float: right;margin-top: 10px">Delete
+                        All Rows</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Temp & Humidity</h5>
+                    <div class="table-responsive">
+                        <table id="tempTable" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Temperature</th>
+                                    <th>Humidity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr>
+                                    <td>Tiger Nixon</td>
+                                    <td>System Architect</td>
+                                    <td>System Architect</td>
+                                </tr>
+                                <tr>
+                                    <td>Garrett Winters</td>
+                                    <td>Accountant</td>
+                                    <td>System Architect</td>
+                                </tr> -->
+                            </tbody>
+
+                            <!-- <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                              
+                                </tr>
+                            </tfoot> -->
+                        </table>
+                    </div>
+                    <button onclick="window.lightTable.ajax.reload(null, false);" type="button"
+                        class="btn btn-outline-primary" style="margin-top: 10px">Refresh Table</button>
+
+                    <button onclick="deleteAllTempHumidityData()" type="button" class="btn btn-outline-danger"
+                        style="float: right;margin-top: 10px">Delete
+                        All Rows</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="../static/assets/extra-libs/DataTables/datatables.min.js"></script>
+<script src="../static/assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+<script src="../static/assets/extra-libs/multicheck/jquery.multicheck.js"></script>
+
+
+<script>
+    function generateTempHumidityTable() {
+        window.tempHumidityTable = $('#tempTable').DataTable({
+            'responsive': true,
+            //'data': data,
+            "autoWidth": false,
+            "ajax": "/api/v1/dht11",
+            'columns': [
+                { data: "date" },
+                { data: "temperature" },
+                { data: "humidity" },
+            ]
+        });
+    };
+
+    function generateLightTable() {
+        window.lightTable = $('#lightTable').DataTable({
+            'responsive': true,
+            "autoWidth": false,
+            // 'data': data,
+            "ajax": "/api/v1/ldr",
+            'columns': [
+                { data: "date" },
+                { data: "light" },
+            ]
+        });
+    }
+
+
+    function deleteAllTempHumidityData() {
+        // API Call
+        $.ajax({
+            url: "/api/v1/dht11",
+            async: false,
+            success: function (results) {
+                console.log(results);
+            },
+            type: 'DELETE'
+        });
+        window.tempHumidityTable.ajax.reload(null, false);
+
+    };
+
+
+    function deleteAllLightData() {
+        // API Call
+        $.ajax({
+            url: "/api/v1/ldr",
+            async: false,
+            success: function (results) {
+                console.log(results);
+            },
+            type: 'DELETE'
+        });
+        window.lightTable.ajax.reload(null, false);
+
+    };
+
+    generateTempHumidityTable();
+    generateLightTable();
+    setInterval(function () {
+        window.tempHumidityTable.ajax.reload(null, false);
+    }, 5000);
+    setInterval(function () {
+        window.lightTable.ajax.reload(null, false);
+    }, 5000);
+
+
+
+
+
+        // setInterval(function () {
+        //     tempTable.ajax.reload(null, false);
+        // }, 3000);
+
+</script>
+
+{% endblock %}
