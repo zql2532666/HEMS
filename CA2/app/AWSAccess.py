@@ -8,8 +8,8 @@ from configparser import ConfigParser
 import os 
 
 # test imports for sensors, will remove
-import Adafruit_DHT
-import serial
+# import Adafruit_DHT
+# import serial
 
 
 class MQTTPublisher:
@@ -63,7 +63,7 @@ class MQTTPublisher:
         
 
 
-pin = 23
+""" pin = 23
 serial = serial.Serial("/dev/ttyUSB0",9600)  #change ACM number as found from ls /dev/tty/ACM*
 serial.baudrate = 9600
 mqtt_publisher = MQTTPublisher()
@@ -84,4 +84,4 @@ while True:
             print("Error while getting data...")
             print(sys.exc_info()[0])
             print(sys.exc_info()[1])
-            error = True
+            error = True """
