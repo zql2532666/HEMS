@@ -33,7 +33,7 @@ PRIVATE_KEY_PATH = os.path.join(basedir,config['AWS']['PRIVATE_KEY_PATH'])
 PUBLIC_KEY_PATH = os.path.join(basedir,config['AWS']['PUBLIC_KEY_PATH'])
 
 # Ports and Topics
-MQQT_PORT = int(config['AWS']['MQQT_PORT'])
+MQTT_PORT = int(config['AWS']['MQTT_PORT'])
 DHT11_TOPIC = config['AWS']['DHT11_TOPIC']
 LIGHT_TOPIC = config['AWS']['LIGHT_TOPIC']
 

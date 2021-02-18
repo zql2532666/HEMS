@@ -25,7 +25,7 @@ class MQTTPublisher:
         self.ROOT_CA_PATH = config['AWS']['ROOT_CA_PATH']
         self.CERTIFICATE_PATH =  config['AWS']['CERTIFICATE_PATH']
         self.PRIVATE_KEY_PATH = config['AWS']['PRIVATE_KEY_PATH']
-        self.MQQT_PORT = int(config['AWS']['MQQT_PORT'])
+        self.MQTT_PORT = int(config['AWS']['MQTT_PORT'])
         self.DHT11_TOPIC = config['AWS']['DHT11_TOPIC']
         self.LIGHT_TOPIC = config['AWS']['LIGHT_TOPIC']
 
