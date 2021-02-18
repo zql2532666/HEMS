@@ -25,9 +25,14 @@ SENSOR_LIGHT_BAUDRATE = int(config['SENSOR-LIGHT']['BAUDRATE'])
 
 """ AWS CONFIG """ 
 AWS_HOST = config['AWS']['HOST']
-ROOT_CA_PATH = config['AWS']['ROOT_CA_PATH ']
-CERTIFICATE_PATH =  config['AWS']['CERTIFICATE_PATH']
-PRIVATE_KEY_PATH = config['AWS']['PRIVATE_KEY_PATH']
+
+# Certificate Path
+ROOT_CA_PATH = os.path.join(basedir,config['AWS']['ROOT_CA_PATH '])
+CERTIFICATE_PATH = os.path.join(basedir,config['AWS']['CERTIFICATE_PATH'])
+PRIVATE_KEY_PATH = os.path.join(basedir,config['AWS']['PRIVATE_KEY_PATH'])
+PUBLIC_KEY_PATH = os.path.join(basedir,config['AWS']['PUBLIC_KEY_PATH'])
+
+# Ports and Topics
 MQQT_PORT = int(config['AWS']['MQQT_PORT'])
 DHT11_TOPIC = config['AWS']['DHT11_TOPIC']
 LIGHT_TOPIC = config['AWS']['LIGHT_TOPIC']
