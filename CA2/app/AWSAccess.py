@@ -71,6 +71,8 @@ while True:
         humidity, temperature = Adafruit_DHT.read_retry(11, pin)
 
         if humidity is not None and temperature is not None:
+            print(f"humidity is {humidity}")
+            print(f"temp is {temperature}")
             mqtt_publisher.publish_dht11_data(humidity, temperature)
             sleep(5)
         else:
