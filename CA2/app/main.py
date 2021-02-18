@@ -4,6 +4,33 @@ from flask import Blueprint, render_template, session, jsonify
 from app import *
 from raspberry import *
 from threading import Thread
+from configparser import ConfigParser
+import os 
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+config = ConfigParser()
+config.read(os.path.join(basedir, 'config.conf'))
+
+""" RASPBERRY PI CONFIG"""
+RASPBERRY_PI_DEVICE_ID = int(config['RASPBERRY-PI']['DEVICE_ID'])
+RASPBERRY_PI_DEVICE_NAME = config['RASPBERRY-PI']['DEVICE_NAME']
+
+""" SENSORS CONFIG"""
+SENSOR_DHT11_PIN = int(config['SENSOR-DHT1']['PIN'])
+SENSOR_LED_PIN = int(config['SENSOR-LED']['PIN'])
+SENSOR_BUZZER_PIN = int(config['SENSOR-BUZZER']['PIN'])
+SENSOR_BUTTON_PIN = int(config['SENSOR-BUTTON']['PIN'])
+SENSOR_LIGHT_SERIAL_PORT = config['SENSOR-LIGHT']['SERIAL_PORT']
+SENSOR_LIGHT_BAUDRATE = int(config['SENSOR-LIGHT']['BAUDRATE'])
+
+""" AWS CONFIG """ 
+AWS_HOST = config['AWS']['HOST']
+ROOT_CA_PATH = config['AWS']['ROOT_CA_PATH ']
+CERTIFICATE_PATH =  config['AWS']['CERTIFICATE_PATH']
+PRIVATE_KEY_PATH = config['AWS']['PRIVATE_KEY_PATH']
+MQQT_PORT = int(config['AWS']['MQQT_PORT'])
+DHT11_TOPIC = config['AWS']['DHT11_TOPIC']
+LIGHT_TOPIC = config['AWS']['LIGHT_TOPIC']
 
 main = Blueprint('main', __name__)
 
