@@ -27,7 +27,7 @@ SENSOR_LIGHT_BAUDRATE = int(config['SENSOR-LIGHT']['BAUDRATE'])
 AWS_HOST = config['AWS']['HOST']
 
 # Certificate Path
-ROOT_CA_PATH = os.path.join(basedir,config['AWS']['ROOT_CA_PATH '])
+ROOT_CA_PATH = os.path.join(basedir,config['AWS']['ROOT_CA_PATH'])
 CERTIFICATE_PATH = os.path.join(basedir,config['AWS']['CERTIFICATE_PATH'])
 PRIVATE_KEY_PATH = os.path.join(basedir,config['AWS']['PRIVATE_KEY_PATH'])
 PUBLIC_KEY_PATH = os.path.join(basedir,config['AWS']['PUBLIC_KEY_PATH'])
