@@ -64,20 +64,21 @@ class MQTTPublisher:
 
 
 pin = 23
+serial = serial.Serial("/dev/ttyUSB0",9600)  #change ACM number as found from ls /dev/tty/ACM*
+serial.baudrate = 9600
 mqtt_publisher = MQTTPublisher()
 
 while True:
     try:
-        humidity, temperature = Adafruit_DHT.read_retry(11, pin)
+        read_serial = serial.readline() # read data sent from arduino
+        light_value = read_serial.decode('ASCII').strip() # converts byte to string
 
-        if humidity is not None and temperature is not None:
-            print(f"humidity is {humidity}")
-            print(f"temp is {temperature}")
-            mqtt_publisher.publish_dht11_data(humidity, temperature)
+        if light_value is not None:
+            print(f"light value: {light_value}")
+            mqtt_publisher.publish_light_data(light_value)
             sleep(5)
         else:
-            print('Failed to get DHT22 Reading, trying again in 2 seconds')
-
+            print('Failed to get light sensor Reading, trying again in 2 seconds')
     except:
         if not error:
             print("Error while getting data...")
