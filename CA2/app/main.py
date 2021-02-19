@@ -109,7 +109,7 @@ def realtime_light_data():
 @register_login
 def light_data_chart():
 
-    light_data = json.loads(db_access.retrieve_light_data_last_10())
+    light_data = db_access.retrieve_light_data_last_10()
 
     table_data_dict = dict()
     table_data_dict["data"] = [i['light_value'] for i in light_data]
@@ -122,7 +122,7 @@ def light_data_chart():
 def light_data_datatable():
 
     datatable_dict = dict()
-    datatable_dict["data"] = json.loads(db_access.retrieve_light_data_all())
+    datatable_dict["data"] = db_access.retrieve_light_data_all()
 
     return jsonify(datatable_dict)
 
