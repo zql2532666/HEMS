@@ -1,4 +1,3 @@
-from CA2.app.AWSAccess import MQTTPublisher
 from time import sleep, mktime
 import time as t
 import sys
