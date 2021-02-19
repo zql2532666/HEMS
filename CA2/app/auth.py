@@ -24,6 +24,8 @@ def login_post():
 
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
+    print(len(user))
+    print(check_password_hash(user[0]['password'], password))
     if len(user) != 1 or not check_password_hash(user[0]['password'], password):
         flash(u'Please check your login details and try again.', 'danger')
         return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
