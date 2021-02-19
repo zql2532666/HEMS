@@ -32,7 +32,7 @@ def login_post():
 
     # Create session data, we can access this data in other routes
     session['loggedin'] = True
-    session['id'] = user[0]['id']
+    # session['id'] = user[0]['id']
     session['name'] = user[0]['name']
     session['email'] = user[0]['email']
 
@@ -66,7 +66,7 @@ def logout():
 
     # Remove session data, this will log the user out
     session.pop('loggedin', None)
-    session.pop('id', None)
+    # session.pop('id', None)
     session.pop('name', None)
     session.pop('email', None)
 
