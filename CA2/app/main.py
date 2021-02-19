@@ -1,12 +1,13 @@
 # Main routes of app
 
-from flask import Blueprint, render_template, session, jsonify, Response
+from flask import Blueprint, render_template, session, jsonify
 from app import *
 from raspberry import *
 from threading import Thread
 from configparser import ConfigParser
 import os 
 from camera_pi import Camera
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 config = ConfigParser()
@@ -59,12 +60,6 @@ def alarm():
 
     return render_template("alarm.html", title="Set Alarm", name=session['name'].title())
 
-@main.route("/facialrecognition", methods=['GET', 'POST'])
-@register_login
-def facial():
-
-    return render_template("facial.html", title="Facial Recognition", name=session['name'].title())
-
 @main.route('/api/v1/alarm', methods=['GET'])
 @register_login
 def getAlarm():
@@ -109,7 +104,8 @@ def realtime_light_data():
 @register_login
 def light_data_chart():
 
-    light_data = json.loads(db_access.retrieve_lights_for_chart())
+    # light_data = json.loads(db_access.retrieve_lights_for_chart())
+    light_data = db_access.retrieve_light_data_last_10()
 
     table_data_dict = dict()
     table_data_dict["data"] = [i['light_value'] for i in light_data]
@@ -122,7 +118,7 @@ def light_data_chart():
 def light_data_datatable():
 
     datatable_dict = dict()
-    datatable_dict["data"] = json.loads(db_access.retrieve_lights_for_table())
+    datatable_dict["data"] = db_access.retrieve_light_data_all()
 
     return jsonify(datatable_dict)
 
@@ -142,13 +138,13 @@ def video_feed():
 # Threadding
 
 t1 = Thread(target = get_data)
-# t2 = Thread(target = store_data)
+t2 = Thread(target = store_data)
 t3 = Thread(target = get_dht_data)
-# t4 = Thread(target = start_tele_bot)
-# t5 = Thread(target = lcd)
+t4 = Thread(target = start_tele_bot)
+t5 = Thread(target = lcd)
 
 t1.start()
-# t2.start()
+t2.start()
 t3.start()
-# t4.start()
-# t5.start()
+t4.start()
+t5.start()
