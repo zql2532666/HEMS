@@ -108,8 +108,10 @@
   <script src="dist/js/pages/dashboard2.js"></script>
 
   <script>
+    var lightTable;
+
+
     $(function () {
-      getLEDStatus();
       setInterval(function () {
         //updateDatatable();
         lightTable.ajax.reload( null, false );
@@ -127,8 +129,6 @@
 
 
 //////////////////////////////////////////////////////////////////////////// Light Table //////////////////////////////////////////////////////////////////////////////////////   
-    var lightTable;
-
     $(function () {
       lightTable = $('light-table').DataTable({
         "ordering": true,
