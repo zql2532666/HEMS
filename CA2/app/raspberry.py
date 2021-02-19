@@ -78,7 +78,6 @@ def run_light_sensor():
                 light_value = read_serial.decode('ASCII').strip() # converts byte to string
 
                 if light_value is not None:
-                    print(f"storing light value: {light_value}")
                     lock.acquire()
                     result_value = mqtt_publisher.publish_light_data(light_value) # publish the light value to aws via mqtt and store in dynamodb
 
@@ -87,6 +86,7 @@ def run_light_sensor():
 
                     realtime_dict["light"] = light_value  # update realtime_dict
                     lock.release()
+                    sleep(5)
 
             except KeyboardInterrupt:
                 update = False
@@ -112,17 +112,16 @@ def run_dht11_sensor():
                 humidity, temperature = Adafruit_DHT.read_retry(11, SENSOR_DHT11_PIN)
 
                 if humidity is not None and temperature is not None:
+                    print(f"stored humidity: {humidity}")
+                    print(f"stored temperature: {temperature}")
                     
                     lock.acquire()
                     result_value = mqtt_publisher.publish_dht11_data(humidity, temperature)  # publish the dht 11 values to aws via mqtt and store in dynamodb
 
-                    if result_value == True:
-                        print(f"stored humidity: {humidity}")
-                        print(f"stored temperature: {temperature}")
-
                     realtime_dict["humidity"] = humidity  # update realtime_dict
                     realtime_dict["temperature"] = temperature  # update realtime_dict
                     lock.release()
+                    sleep(5)
 
             except KeyboardInterrupt:
                 update = False
