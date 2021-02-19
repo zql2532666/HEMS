@@ -138,17 +138,3 @@ def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
-    
-# Threadding
-
-t1 = Thread(target = get_data)
-# t2 = Thread(target = store_data)
-t3 = Thread(target = get_dht_data)
-# t4 = Thread(target = start_tele_bot)
-# t5 = Thread(target = lcd)
-
-t1.start()
-# t2.start()
-t3.start()
-# t4.start()
-# t5.start()
