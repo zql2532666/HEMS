@@ -122,7 +122,7 @@ def run_dht11_sensor():
                     realtime_dict["humidity"] = humidity  # update realtime_dict
                     realtime_dict["temperature"] = temperature  # update realtime_dict
                     lock.release()
-                    sleep(5)
+                    sleep(2)
 
             except KeyboardInterrupt:
                 update = False
