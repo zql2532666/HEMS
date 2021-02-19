@@ -30,8 +30,6 @@ SENSOR_LIGHT_BAUDRATE = int(config['SENSOR-LIGHT']['BAUDRATE'])
 serial = serial.Serial(SENSOR_LIGHT_SERIAL_PORT, SENSOR_LIGHT_BAUDRATE)  #change ACM number as found from ls /dev/tty/ACM*
 serial.baudrate=SENSOR_LIGHT_BAUDRATE
 
-# Initialise Database
-db_access = DbAccess()
 
 # Initialise AWS MQTT Publisher 
 mqtt_publisher = MQTTPublisher()
@@ -112,11 +110,14 @@ def run_dht11_sensor():
                 humidity, temperature = Adafruit_DHT.read_retry(11, SENSOR_DHT11_PIN)
 
                 if humidity is not None and temperature is not None:
-                    print(f"stored humidity: {humidity}")
-                    print(f"stored temperature: {temperature}")
-                    
                     lock.acquire()
                     result_value = mqtt_publisher.publish_dht11_data(humidity, temperature)  # publish the dht 11 values to aws via mqtt and store in dynamodb
+
+                    if result_value == True:
+                        print("\n")
+                        print(f"stored humidity: {humidity}")
+                        print(f"stored temperature: {temperature}")
+                        print("\n")
 
                     realtime_dict["humidity"] = humidity  # update realtime_dict
                     realtime_dict["temperature"] = temperature  # update realtime_dict
@@ -134,113 +135,6 @@ def run_dht11_sensor():
         print(sys.exc_info()[0])
         print(sys.exc_info()[1])
 
-
-
-'''
-def get_light_data():
-    global light_value
-    error = False
-    while True:
-        try:
-            read_serial = serial.readline() # read data sent from arduino
-            light_value = read_serial.decode('ASCII').strip() # converts byte to string
-            realtime_dict["light"] = light_value
-            if __name__ == "__main__":
-                print(light_value)
-        except:
-            realtime_dict["light"] = -1
-            if not error:
-                print("Error while getting data...")
-                print(sys.exc_info()[0])
-                print(sys.exc_info()[1])
-                error = True
-
-
-def get_dht_data():
-    global humidity
-    global temperature
-    error = False
-    while True:
-
-        try:
-            humidity, temperature = Adafruit_DHT.read_retry(11, SENSOR_DHT11_PIN)
-
-            if humidity is not None and temperature is not None:
-                realtime_dict["humidity"] = humidity
-                realtime_dict["temperature"] = temperature
-                if __name__ == "__main__":
-                    print(f'Temp: {temperature} C')
-                    print(f'Humidity: {humidity}')
-            else:
-                print('Failed to get DHT11 Reading, trying again in 2 seconds')
-
-            sleep(2)
-        except:
-            realtime_dict["humidity"] = -1
-            realtime_dict["temperature"] = -1
-            if not error:
-                print("Error while getting data...")
-                print(sys.exc_info()[0])
-                print(sys.exc_info()[1])
-                error = True
-
-
-def store_light_data():
-    update = False
-
-    sleep(2) # wait after light_value updated from thread 1 before start storing
-
-    update = True
-
-    while update:
-        try:
-            if realtime_dict["light"] != -1:
-                # result_value = db_access.insert_light_value(light_value)
-                result_value = mqtt_publisher.publish_light_data(light_value)  # publish the light value to aws via mqtt and store in dynamodb
-
-            if __name__ == "__main__":
-                # if result_value == 1:
-                if result_value == True:
-                    print(f"Light value {light_value} inserted.")
-                
-                print("Wait 2 secs before storing next light values..")
-
-            sleep(2)
-
-        except:
-            print("Error while publishing data...")
-            print(sys.exc_info()[0])
-            print(sys.exc_info()[1])
-
-
-def store_dht_data():
-    update = False
-
-    sleep(2) 
-
-    update = True
-
-    while update:
-        try:
-            if realtime_dict["temperature"] != -1 and realtime_dict['humidity'] != -1:
-                # result_value = db_access.insert_light_value(light_value)
-                result_value = mqtt_publisher.publish_dht11_data(humidity, temperature)  # publish the light value to aws via mqtt and store in dynamodb
-
-            if __name__ == "__main__":
-                # if result_value == 1:
-                if result_value == True:
-                    print(f"DHT11 temperature {temperature} inserted.")
-                    print(f"DHT11 humidity {humidity} inserted.")
-
-                print("Wait 2 secs before storing next DHT11 values..")
-
-            sleep(2)
-
-        except:
-            print("Error while publishing data...")
-            print(sys.exc_info()[0])
-            print(sys.exc_info()[1])
-'''
 
 
 # def lcd():
