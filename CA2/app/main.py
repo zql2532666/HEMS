@@ -108,7 +108,7 @@ def realtime_light_data():
 @main.route('/api/v1/lightValueForChart', methods=['GET'])
 @register_login
 def light_data_chart():
-
+    db_access = DynamoDBEngine()
     light_data = db_access.retrieve_light_data_last_10()
 
     table_data_dict = dict()
@@ -120,11 +120,45 @@ def light_data_chart():
 @main.route("/api/v1/lightValueForDatatable", methods=['GET'])
 @register_login
 def light_data_datatable():
-
+    db_access = DynamoDBEngine()
     datatable_dict = dict()
     datatable_dict["data"] = db_access.retrieve_light_data_all()
 
     return jsonify(datatable_dict)
+
+@main.route('/api/v1/tempValueForChart', methods=['GET'])
+@register_login
+def temp_data_chart():
+    db_access = DynamoDBEngine()
+    dht11_data = db_access.retrieve_dht11_data_last_10()
+
+    table_data_dict = dict()
+    table_data_dict["data"] = [i['temperature'] for i in dht11_data]
+    table_data_dict["labels"] = [i['date_time'] for i in dht11_data]
+
+    return str(table_data_dict)
+
+@main.route('/api/v1/humidityValueForChart', methods=['GET'])
+@register_login
+def humidity_data_chart():
+    db_access = DynamoDBEngine()
+    dht11_data = db_access.retrieve_dht11_data_last_10()
+
+    table_data_dict = dict()
+    table_data_dict["data"] = [i['humidity'] for i in dht11_data]
+    table_data_dict["labels"] = [i['date_time'] for i in dht11_data]
+
+    return str(table_data_dict)
+
+@main.route("/api/v1/dht11ValueForDatatable", methods=['GET'])
+@register_login
+def dht11_data_datatable():
+    db_access = DynamoDBEngine()
+    datatable_dict = dict()
+    datatable_dict["data"] = db_access.retrieve_dht11_data_all()
+
+    return jsonify(datatable_dict)
+
 
 def gen(camera):
     """Video streaming generator function."""
