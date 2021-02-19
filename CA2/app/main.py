@@ -64,6 +64,12 @@ def facial():
 
     return render_template("facial.html", title="Facial Recognition", name=session['name'].title())
 
+@main.route("/tables", methods=['GET', 'POST'])
+@register_login
+def tables():
+
+    return render_template("tables.html", title="Tables", name=session['name'].title())
+
 @main.route('/api/v1/alarm', methods=['GET'])
 @register_login
 def getAlarm():
