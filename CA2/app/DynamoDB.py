@@ -10,7 +10,7 @@ class DynamoDBEngine:
 
     def retrieve_light_data(self):
         # response = self.light_table().query()
-        response = self.light_table().scan()
+        response = self.light_table.scan()
         print(response)
 
 db_engine = DynamoDBEngine()
