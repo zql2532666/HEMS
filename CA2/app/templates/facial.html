@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block mainContent %}
+        <div class="row">
+          <!-- Left col -->
+          <section class="col-lg-12">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  Live Video Feed
+                </h3>
+              </div><!-- /.card-header -->
+              <div class="card-body" style="text-align: center;">
+                <h3><img src="{{ url_for('main.video_feed') }}" width="30%"></h3>
+              </div><!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </section>
+        </div>
+        <!-- /.row (main row) -->
+{% endblock %}
+{% block script%}
+  <!-- PAGE PLUGINS -->
+  <!-- DataTables -->
+  <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <!-- jQuery Mapael -->
+  <script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+  <script src="plugins/raphael/raphael.min.js"></script>
+  <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
+  <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+  <!-- ChartJS -->
+  <script src="plugins/chart.js/Chart.min.js"></script>
+
+  <!-- PAGE SCRIPTS -->
+  <script src="dist/js/pages/dashboard2.js"></script>
+
+  <script>
+    $(function () {
+      getLEDStatus();
+      setInterval(function(){
+        getRealTimeData();
+        getLEDStatus();
+      }, 2000);
+    });
+
+    function getLEDStatus(){
+      $.ajax({
+        url: '/api/v1/led/status',
+        type: 'GET',
+        success: function(result) {
+          if(result == 'on'){
+            $('#toggle-event').bootstrapToggle('on', true);
+          }else if(result == 'off'){
+            $('#toggle-event').bootstrapToggle('off', true);
+          }
+        }
+      });
+    }
+
+    function getRealTimeData(){
+      $.ajax({
+        url: '/api/v1/realtimedata',
+        type: 'GET',
+        success: function(result) {
+          if (result.light == "-1") {
+            $('#light_value').html("Disconnected");
+          }else{
+            $('#light_value').html(result.light);
+          }
+
+          if (result.humidity == "-1") {
+            $('#temp-info').html("Disconnected");
+            $('#humid-info').html("Disconnected");
+          }else{
+            $('#humidity').html(result.humidity);
+            $('#temperature').html(result.temperature);
+          }
+        }
+      });
+    }
+
+    var chartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      datasetFill : false,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          },
+          ticks: {
+            beginAtZero: true,
+            steps: 10,
+            stepValue: 5,
+            max: 800
+          }
+        }]
+      }
+    }
+
+    function renderChart(data, labels) {
+        var ctx = document.getElementById("light-chart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'This week',
+                    data: data,
+                    fill: false
+                }]
+            },
+            options: chartOptions
+        });
+    }
+    var datetime;
+    $("#renderBtn").click(
+        function () {
+            var data = []
+            var labels = []
+
+            $.ajax({
+              url: '/api/v1/lightValueForChart',
+              type: 'GET',
+              success: function(result) {
+                result = JSON.parse(result.replace(/'/g, '"'));
+                data = result.data;
+                labels = result.labels;
+
+                // convert to more readable time
+                for(var i = 0; i < labels.length; i++) {
+                  jsdatetime = new Date(Date.parse(labels[i]));
+                  labels[i] = jsdatetime.toLocaleTimeString();
+                }
+
+                renderChart(data, labels);
+              }
+            });
+        }
+    );
+
+    var CustomRenders = {
+      dateTime: function (data, type, row, meta) {
+        jsdatetime = new Date(Date.parse(data));
+        return jsdatetime.toLocaleString();
+      }
+    };
+  
+    var table;
+
+    $(function () {
+      table = $('#example2').DataTable({
+        "ordering": true,
+        "responsive": true,
+        "autoWidth": false,
+        "ajax": "/api/v1/lightValueForDatatable",
+        "columns": [
+          { "data": "id"},
+          { "data": "datetime_value", "render": CustomRenders.dateTime},
+          { "data": "light_value"}
+        ],
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+                "searchable": false
+            }
+        ],
+        "order": [[ 0, "desc" ]]
+      });
+    });
+  
+    $("#updateBtn").click(
+        function () {
+          //updateDatatable();
+          table.ajax.reload( null, false );
+        }
+    );
+
+    $(function() {
+      $('#toggle-event').change(function() {
+        $.ajax({
+          url: '/api/v1/led/toggle',
+          type: 'GET',
+          success: function(result) {
+            console.log("done")
+          }
+        });
+      })
+    })
+
+    $("#renderBtn").click();
+    getRealTimeData();
+  </script>
+{% endblock %}
