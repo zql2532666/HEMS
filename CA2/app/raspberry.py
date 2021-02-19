@@ -12,7 +12,8 @@ import telepot
 from rpi_lcd import LCD
 from threading import Lock
 from datetime import datetime as dt
-
+from picamera import PiCamera
+import boto3
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 config = ConfigParser()
@@ -49,6 +50,35 @@ realtime_dict = {
                 }
 
 gobal_dict = { "alarm": None, "rang": False }
+
+
+directory = '/home/pi/Desktop/rekognition' #folder name on your raspberry pi
+P=PiCamera()
+collectionId='mycollection' #collection name
+rek_client=boto3.client('rekognition', region_name='us-east-1')
+
+def analyse_face():
+    for f in os.listdir(directory):
+        os.remove(os.path.join(directory, f))
+    milli = int(round(t.time() * 1000))
+    image = '{}/image_{}.jpg'.format(directory,milli)
+    P.capture(image) #capture an image
+    print('captured '+image)
+    with open(image, 'rb') as image:
+        try: #match the captured imges against the indexed faces
+            match_response = rek_client.search_faces_by_image(CollectionId=collectionId, Image={'Bytes': image.read()}, MaxFaces=1, FaceMatchThreshold=85)
+            if match_response['FaceMatches']:
+                print('Hello, ',match_response['FaceMatches'][0]['Face']['ExternalImageId'])
+                print('Similarity: ',match_response['FaceMatches'][0]['Similarity'])
+                print('Confidence: ',match_response['FaceMatches'][0]['Face']['Confidence'])
+                return 'Hello, ',match_response['FaceMatches'][0]['Face']['ExternalImageId']
+            else:
+                print('No faces matched')
+                return "Access denied"
+        except:
+            print('No face detected')
+            return "Access denied"
+    return "Access denied"
 
 def ledOn():
     led.on()
