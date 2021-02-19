@@ -2,13 +2,10 @@ from threading import Thread
 from raspberry import *
 
 
-t1 = Thread(target = get_light_data)
-t2 = Thread(target = store_light_data)
-t3 = Thread(target = get_dht_data)
-t4 = Thread(target = store_dht_data)
+dht11_thread = Thread(target=run_dht11_sensor)
+light_thread = Thread(target=run_light_sensor)
 
-
-threads = [t1, t2, t3, t4]
+threads = [dht11_thread, light_thread]
 
 for t in threads:
     t.start()
