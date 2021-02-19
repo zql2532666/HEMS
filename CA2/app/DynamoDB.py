@@ -14,6 +14,7 @@ class DynamoDBEngine:
         print("retrieve_light_data_all")
         response = self.light_table.scan()
         items = response["Items"]
+        items = items[::-1]
         items = jsonc.data_to_json(items)
         return items
     
@@ -25,6 +26,7 @@ class DynamoDBEngine:
         # check if the len of items is more than 10, if it is take the last 10 rows
         if len(items) > 10:
             items= items[:num_of_rows]
+            items = items[::-1]
         # perform json conversion here
         items = jsonc.data_to_json(items)
         # return value here 
@@ -35,6 +37,7 @@ class DynamoDBEngine:
         print("retrieve_dht11_data_all")
         response = self.dht11_table.scan()
         items = response["Items"]
+        items = items[::-1]
         items = jsonc.data_to_json(items)
         return items
     
@@ -46,6 +49,7 @@ class DynamoDBEngine:
         # check if the len of items is more than 10, if it is take the last 10 rows
         if len(items) > 10:
             items= items[:num_of_rows]
+            items = items[::-1]
         # perform json conversion here
         items = jsonc.data_to_json(items)
         print(items)
