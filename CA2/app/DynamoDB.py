@@ -16,4 +16,5 @@ db_engine = DynamoDBEngine()
 print(db_engine.dht11_table.creation_date_time)
 print(db_engine.light_table.creation_date_time)
 print(db_engine.user_table.creation_date_time)
+db_engine.retrieve_light_data()
     
