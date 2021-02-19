@@ -3,7 +3,7 @@ import time as t
 import sys
 import os
 from DbAccess import *
-from AWSAccess import *
+from Mqtt import *
 import serial
 from threading import Thread
 import Adafruit_DHT
