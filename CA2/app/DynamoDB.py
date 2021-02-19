@@ -9,7 +9,7 @@ class DynamoDBEngine:
         self.user_table = self.dynamodb.Table('user_data')
 
     def retrieve_all_light_data(self):
-        response = self.light_table().query()
+        response = self.light_table.query()
         # response = self.light_table.scan()
         print(response)
 
