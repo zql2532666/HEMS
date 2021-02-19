@@ -28,6 +28,7 @@ class DynamoDBEngine:
         # perform json conversion here
         items = jsonc.data_to_json(items)
         # return value here 
+        print(items)
         return items
 
     def retrieve_dht11_data_all(self):
@@ -47,6 +48,7 @@ class DynamoDBEngine:
             items= items[:num_of_rows]
         # perform json conversion here
         items = jsonc.data_to_json(items)
+        print(items)
         return items
 
     def retrieve_user_by_email(self, email):
@@ -57,6 +59,7 @@ class DynamoDBEngine:
             )
         items = response["Items"]
         items = jsonc.data_to_json(items)
+        print(items)
         # items should normally just be one user unless there is an email duplicate
         return items
 
