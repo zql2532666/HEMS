@@ -2,6 +2,7 @@ from CA2.app.AWSAccess import MQTTPublisher
 from time import sleep, mktime
 import time as t
 import sys
+import os
 from DbAccess import *
 from AWSAccess import *
 import serial
@@ -104,6 +105,7 @@ def get_dht_data():
             sleep(2)
         except:
             realtime_dict["humidity"] = -1
+            realtime_dict["temperature"] = -1
             if not error:
                 print("Error while getting data...")
                 print(sys.exc_info()[0])
@@ -141,8 +143,35 @@ def store_light_data():
             print(sys.exc_info()[1])
 
 
-def store_dht11_data():
-    pass
+def store_dht_data():
+    update = False
+
+    sleep(2) 
+
+    update = True
+
+    while update:
+        try:
+            if realtime_dict["temperature"] == -1 and realtime_dict['humidity'] == -1:
+                continue
+
+            # result_value = db_access.insert_light_value(light_value)
+            result_value = mqtt_publisher.publish_dht11_data(humidity, temperature)  # publish the light value to aws via mqtt and store in dynamodb
+
+            if __name__ == "__main__":
+                # if result_value == 1:
+                if result_value == True:
+                    print(f"DHT11 values {light_value} inserted.")
+                
+                print("Wait 2 secs before storing next DHT11 values..")
+
+            sleep(2)
+
+        except:
+            print("Error while publishing data...")
+            print(sys.exc_info()[0])
+            print(sys.exc_info()[1])
+
 
 
 # def lcd():
