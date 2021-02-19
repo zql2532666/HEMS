@@ -1,7 +1,9 @@
+from CA2.app.AWSAccess import MQTTPublisher
 from time import sleep, mktime
 import time as t
 import sys
 from DbAccess import *
+from AWSAccess import *
 import serial
 from threading import Thread
 import Adafruit_DHT
@@ -10,14 +12,31 @@ import telepot
 from rpi_lcd import LCD
 from datetime import datetime as dt
 
-serial = serial.Serial("/dev/ttyUSB0",9600)  #change ACM number as found from ls /dev/tty/ACM*
-serial.baudrate=9600
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+config = ConfigParser()
+config.read(os.path.join(basedir, 'config.conf'))
+
+""" SENSORS CONFIG"""
+SENSOR_DHT11_PIN = int(config['SENSOR-DHT11']['PIN'])
+SENSOR_LED_PIN = int(config['SENSOR-LED']['PIN'])
+SENSOR_BUZZER_PIN = int(config['SENSOR-BUZZER']['PIN'])
+SENSOR_BUTTON_PIN = int(config['SENSOR-BUTTON']['PIN'])
+SENSOR_LIGHT_SERIAL_PORT = config['SENSOR-LIGHT']['SERIAL_PORT']
+SENSOR_LIGHT_BAUDRATE = int(config['SENSOR-LIGHT']['BAUDRATE'])
+
+
+serial = serial.Serial(SENSOR_LIGHT_SERIAL_PORT, SENSOR_LIGHT_BAUDRATE)  #change ACM number as found from ls /dev/tty/ACM*
+serial.baudrate=SENSOR_LIGHT_BAUDRATE
 
 # Initialise Database
 db_access = DbAccess()
 
-led = LED(17)
-buzzer = Buzzer(27)
+# Initialise AWS MQTT Publisher 
+mqtt_publisher = MQTTPublisher()
+
+led = LED(SENSOR_LED_PIN)
+buzzer = Buzzer(SENSOR_BUZZER_PIN)
 
 my_bot_token = '1478147032:AAHHhcMUfsMvt5JkK9jLmQL_k1zubcYlJkY'
 chat_id = 961348895 # own chat id from bot
@@ -43,6 +62,109 @@ def ledStatus():
         return 'on'
     else:
         return 'off'
+
+
+def get_light_data():
+    global light_value
+    error = False
+    while True:
+        try:
+            read_serial = serial.readline() # read data sent from arduino
+            light_value = read_serial.decode('ASCII').strip() # converts byte to string
+            realtime_dict["light"] = light_value
+            if __name__ == "__main__":
+                print(light_value)
+        except:
+            realtime_dict["light"] = -1
+            if not error:
+                print("Error while getting data...")
+                print(sys.exc_info()[0])
+                print(sys.exc_info()[1])
+                error = True
+
+
+def get_dht_data():
+    global humidity
+    global temperature
+    error = False
+    while True:
+
+        try:
+            humidity, temperature = Adafruit_DHT.read_retry(11, SENSOR_DHT11_PIN)
+
+            if humidity is not None and temperature is not None:
+                realtime_dict["humidity"] = humidity
+                realtime_dict["temperature"] = temperature
+                if __name__ == "__main__":
+                    print(f'Temp: {temperature} C')
+                    print(f'Humidity: {humidity}')
+            else:
+                print('Failed to get DHT22 Reading, trying again in 2 seconds')
+
+            sleep(2)
+        except:
+            realtime_dict["humidity"] = -1
+            if not error:
+                print("Error while getting data...")
+                print(sys.exc_info()[0])
+                print(sys.exc_info()[1])
+                error = True
+
+
+def store_light_data():
+    update = False
+
+    sleep(2) # wait after light_value updated from thread 1 before start storing
+
+    update = True
+
+    while update:
+        try:
+            if realtime_dict["light"] == -1:
+                continue
+
+            # result_value = db_access.insert_light_value(light_value)
+            result_value = mqtt_publisher.publish_light_data(light_value)  # publish the light value to aws via mqtt and store in dynamodb
+
+            if __name__ == "__main__":
+                # if result_value == 1:
+                if result_value == True:
+                    print(f"Light value {light_value} inserted.")
+                
+                print("Wait 2 secs before storing next light values..")
+
+            sleep(2)
+
+        except:
+            print("Error while publishing data...")
+            print(sys.exc_info()[0])
+            print(sys.exc_info()[1])
+
+
+def store_dht11_data():
+    pass
+
+
+# def lcd():
+#    lcd = LCD()
+
+#    dti = mktime(dt.now().timetuple())
+
+#    while 1:
+#        ndti = mktime(dt.now().timetuple())
+#        if dti < ndti:
+#            dti = ndti
+#            lcd.clear()
+#            lcd.text(dt.now().strftime('%b %d %Y'), 1)
+#            lcd.text(dt.now().strftime('%H:%M:%S'), 2)
+#            sleep(0.95)
+#        else:
+#            sleep(0.01)
+
+
+
+'''
+TELEGRAM BOT CODE 
 
 def start_tele_bot():
 
@@ -111,93 +233,4 @@ def start_tele_bot():
         sleep(2)
 
         buzzer.off()
-
-def get_data():
-    global light_value
-    error = False
-    while True:
-        try:
-            read_serial = serial.readline() # read data sent from arduino
-            light_value = read_serial.decode('ASCII').strip() # converts byte to string
-            realtime_dict["light"] = light_value
-            if __name__ == "__main__":
-                print(light_value)
-        except:
-            realtime_dict["light"] = -1
-            if not error:
-                print("Error while getting data...")
-                print(sys.exc_info()[0])
-                print(sys.exc_info()[1])
-                error = True
-
-def get_dht_data():
-    pin = 23
-    error = False
-    while True:
-
-        try:
-            humidity, temperature = Adafruit_DHT.read_retry(11, pin)
-
-            if humidity is not None and temperature is not None:
-                realtime_dict["humidity"] = humidity
-                realtime_dict["temperature"] = temperature
-                if __name__ == "__main__":
-                    print(f'Temp: {temperature} C')
-                    print(f'Humidity: {humidity}')
-            else:
-                print('Failed to get DHT22 Reading, trying again in 2 seconds')
-
-            # sleep(2)
-        except:
-            realtime_dict["humidity"] = -1
-            if not error:
-                print("Error while getting data...")
-                print(sys.exc_info()[0])
-                print(sys.exc_info()[1])
-                error = True
-
-
-def store_data():
-    update = False
-
-    sleep(2) # wait after light_value updated from thread 1 before start storing
-
-    update = True
-
-    while update:
-        try:
-            if realtime_dict["light"] == -1:
-                continue
-
-            result_value = db_access.insert_light_value(light_value)
-
-            if __name__ == "__main__":
-                if result_value == 1:
-                    print(f"Light value {light_value} inserted.")
-                
-                print("Wait 2 secs before storing next light values..")
-
-            sleep(2)
-
-        except mysql.connector.Error as err:
-            print(err)
-        except:
-            print("Error while inserting data...")
-            print(sys.exc_info()[0])
-            print(sys.exc_info()[1])
-
-def lcd():
-    lcd = LCD()
-
-    dti = mktime(dt.now().timetuple())
-
-    while 1:
-        ndti = mktime(dt.now().timetuple())
-        if dti < ndti:
-            dti = ndti
-            lcd.clear()
-            lcd.text(dt.now().strftime('%b %d %Y'), 1)
-            lcd.text(dt.now().strftime('%H:%M:%S'), 2)
-            sleep(0.95)
-        else:
-            sleep(0.01)
+'''
