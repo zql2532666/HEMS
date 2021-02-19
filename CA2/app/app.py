@@ -60,6 +60,12 @@ if __name__ == "__main__":
         # blueprint for non-auth parts of app
         app.register_blueprint(main)
 
+        # threads for the sensors 
+        dht11_thread = Thread(target=run_dht11_sensor)
+        light_sensor_thread = Thread(target=run_light_sensor)
+        dht11_thread.start()
+        light_sensor_thread.start()
+
         # server connections
         http_server = WSGIServer(('0.0.0.0', 5000), app)
         app.debug = True
