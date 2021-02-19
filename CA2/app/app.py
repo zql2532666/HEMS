@@ -1,7 +1,13 @@
 import json, requests
 from functools import wraps
 from time import sleep
+<<<<<<< HEAD
 # from DbAccess import *
+=======
+from threading import Thread
+from raspberry import *
+from DbAccess import *
+>>>>>>> 790235242d4d2b47118c998c27bba01ed60180fb
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, flash, send_file, session
 import os
@@ -60,6 +66,12 @@ if __name__ == "__main__":
 
         # blueprint for non-auth parts of app
         app.register_blueprint(main)
+
+        # threads for the sensors 
+        dht11_thread = Thread(target=run_dht11_sensor)
+        light_sensor_thread = Thread(target=run_light_sensor)
+        dht11_thread.start()
+        light_sensor_thread.start()
 
         # server connections
         http_server = WSGIServer(('0.0.0.0', 5000), app)
