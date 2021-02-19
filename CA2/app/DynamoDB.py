@@ -26,7 +26,7 @@ class DynamoDBEngine:
         print(items)
         # check if the len of items is more than 10, if it is take the last 10 rows
         if len(items) > 10:
-            items= items[:num_of_rows]
+            items= items[-num_of_rows:]
             # items = items[::-1]
         # perform json conversion here
         items = jsonc.data_to_json(items)
@@ -49,7 +49,7 @@ class DynamoDBEngine:
         num_of_rows = 10 #limit to last 10 rows
         # check if the len of items is more than 10, if it is take the last 10 rows
         if len(items) > 10:
-            items= items[:num_of_rows]
+            items= items[-num_of_rows:]
             # items = items[::-1]
         # perform json conversion here
         items = jsonc.data_to_json(items)
