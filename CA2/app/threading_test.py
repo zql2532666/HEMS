@@ -1,4 +1,3 @@
-from CA2.app.raspberry import store_dht_data
 from threading import Thread
 from raspberry import *
 
