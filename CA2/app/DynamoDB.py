@@ -11,4 +11,6 @@ class DynamoDBPuller:
 
 db_puller = DynamoDBPuller()
 print(db_puller.dht11_table.creation_date_time)
+print(db_puller.light_table.creation_date_time)
+print(db_puller.user_table.creation_date_time)
     
