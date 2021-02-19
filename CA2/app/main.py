@@ -113,7 +113,7 @@ def light_data_chart():
 
     table_data_dict = dict()
     table_data_dict["data"] = [i['light_value'] for i in light_data]
-    table_data_dict["labels"] = [i['datetime_value'] for i in light_data]
+    table_data_dict["labels"] = [i['date_time'] for i in light_data]
 
     return str(table_data_dict)
 
