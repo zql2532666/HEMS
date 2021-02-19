@@ -10,6 +10,7 @@ import Adafruit_DHT
 from gpiozero import LED, Buzzer
 import telepot
 from rpi_lcd import LCD
+from threading import Lock
 from datetime import datetime as dt
 
 
@@ -38,6 +39,8 @@ mqtt_publisher = MQTTPublisher()
 led = LED(SENSOR_LED_PIN)
 buzzer = Buzzer(SENSOR_BUZZER_PIN)
 
+lock = Lock()
+
 my_bot_token = '1478147032:AAHHhcMUfsMvt5JkK9jLmQL_k1zubcYlJkY'
 chat_id = 961348895 # own chat id from bot
 
@@ -64,6 +67,77 @@ def ledStatus():
         return 'off'
 
 
+
+def run_light_sensor():
+    print("run_light_sensor()")
+    try:
+        update = True
+        while update:
+            try:
+                read_serial = serial.readline() # read data sent from arduino
+                light_value = read_serial.decode('ASCII').strip() # converts byte to string
+
+                if light_value is not None:
+                    print(f"storing light value: {light_value}")
+                    lock.acquire()
+                    result_value = mqtt_publisher.publish_light_data(light_value) # publish the light value to aws via mqtt and store in dynamodb
+
+                    if result_value == True:
+                        print(f"stored light value: {light_value}")
+
+                    realtime_dict["light"] = light_value  # update realtime_dict
+                    lock.release()
+
+            except KeyboardInterrupt:
+                update = False
+
+            except:
+                print("Error while inserting light data...")
+                print(sys.exc_info()[0])
+                print(sys.exc_info()[1])
+
+    except:
+        print(sys.exc_info()[0])
+        print(sys.exc_info()[1])
+
+
+
+
+def run_dht11_sensor():
+    print("run_dht11_sensor()")
+    try:
+        update = True
+        while update:
+            try:
+                humidity, temperature = Adafruit_DHT.read_retry(11, SENSOR_DHT11_PIN)
+
+                if humidity is not None and temperature is not None:
+                    
+                    lock.acquire()
+                    result_value = mqtt_publisher.publish_dht11_data(humidity, temperature)  # publish the dht 11 values to aws via mqtt and store in dynamodb
+
+                    if result_value == True:
+                        print(f"stored humidity: {humidity}")
+                        print(f"stored temperature: {temperature}")
+
+                    realtime_dict["humidity"] = humidity  # update realtime_dict
+                    realtime_dict["temperature"] = temperature  # update realtime_dict
+                    lock.release()
+
+            except KeyboardInterrupt:
+                update = False
+
+            except:
+                print("Error while inserting dht11 data...")
+                print(sys.exc_info()[0])
+                print(sys.exc_info()[1])
+    except:
+        print(sys.exc_info()[0])
+        print(sys.exc_info()[1])
+
+
+
+'''
 def get_light_data():
     global light_value
     error = False
@@ -167,7 +241,7 @@ def store_dht_data():
             print("Error while publishing data...")
             print(sys.exc_info()[0])
             print(sys.exc_info()[1])
-
+'''
 
 
 # def lcd():
