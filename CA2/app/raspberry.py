@@ -99,7 +99,7 @@ def get_dht_data():
                     print(f'Temp: {temperature} C')
                     print(f'Humidity: {humidity}')
             else:
-                print('Failed to get DHT22 Reading, trying again in 2 seconds')
+                print('Failed to get DHT11 Reading, trying again in 2 seconds')
 
             sleep(2)
         except:
@@ -121,11 +121,9 @@ def store_light_data():
 
     while update:
         try:
-            if realtime_dict["light"] == -1:
-                continue
-
-            # result_value = db_access.insert_light_value(light_value)
-            result_value = mqtt_publisher.publish_light_data(light_value)  # publish the light value to aws via mqtt and store in dynamodb
+            if realtime_dict["light"] != -1:
+                # result_value = db_access.insert_light_value(light_value)
+                result_value = mqtt_publisher.publish_light_data(light_value)  # publish the light value to aws via mqtt and store in dynamodb
 
             if __name__ == "__main__":
                 # if result_value == 1:
@@ -151,17 +149,16 @@ def store_dht_data():
 
     while update:
         try:
-            if realtime_dict["temperature"] == -1 and realtime_dict['humidity'] == -1:
-                continue
-
-            # result_value = db_access.insert_light_value(light_value)
-            result_value = mqtt_publisher.publish_dht11_data(humidity, temperature)  # publish the light value to aws via mqtt and store in dynamodb
+            if realtime_dict["temperature"] != -1 and realtime_dict['humidity'] != -1:
+                # result_value = db_access.insert_light_value(light_value)
+                result_value = mqtt_publisher.publish_dht11_data(humidity, temperature)  # publish the light value to aws via mqtt and store in dynamodb
 
             if __name__ == "__main__":
                 # if result_value == 1:
                 if result_value == True:
-                    print(f"DHT11 values {light_value} inserted.")
-                
+                    print(f"DHT11 temperature {temperature} inserted.")
+                    print(f"DHT11 humidity {humidity} inserted.")
+
                 print("Wait 2 secs before storing next DHT11 values..")
 
             sleep(2)
