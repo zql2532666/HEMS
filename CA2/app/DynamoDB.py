@@ -14,6 +14,7 @@ class DynamoDBEngine:
         print("retrieve_light_data_all")
         response = self.light_table.scan()
         items = response["Items"]
+        items = items[::-1]
         items = jsonc.data_to_json(items)
         return items
     
@@ -22,18 +23,22 @@ class DynamoDBEngine:
         response = self.light_table.scan()
         items = response["Items"]
         num_of_rows = 10 #limit to last 10 rows
+        # print(items)
         # check if the len of items is more than 10, if it is take the last 10 rows
         if len(items) > 10:
-            items= items[:num_of_rows]
+            items= items[-num_of_rows:]
+            # items = items[::-1]
         # perform json conversion here
         items = jsonc.data_to_json(items)
         # return value here 
+        print(items)
         return items
 
     def retrieve_dht11_data_all(self):
         print("retrieve_dht11_data_all")
         response = self.dht11_table.scan()
         items = response["Items"]
+        items = items[::-1]
         items = jsonc.data_to_json(items)
         return items
     
@@ -44,9 +49,11 @@ class DynamoDBEngine:
         num_of_rows = 10 #limit to last 10 rows
         # check if the len of items is more than 10, if it is take the last 10 rows
         if len(items) > 10:
-            items= items[:num_of_rows]
+            items= items[-num_of_rows:]
+            # items = items[::-1]
         # perform json conversion here
         items = jsonc.data_to_json(items)
+        print(items)
         return items
 
     def retrieve_user_by_email(self, email):
@@ -57,6 +64,7 @@ class DynamoDBEngine:
             )
         items = response["Items"]
         items = jsonc.data_to_json(items)
+        print(items)
         # items should normally just be one user unless there is an email duplicate
         return items
 
@@ -71,5 +79,6 @@ class DynamoDBEngine:
             Item=insert_data
         )
         print(response)
+
 
     

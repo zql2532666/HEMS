@@ -1,6 +1,6 @@
 # Main routes of app
 
-from flask import Blueprint, render_template, session, jsonify, Response
+from flask import Blueprint, render_template, session, jsonify
 from app import *
 from raspberry import *
 from threading import Thread
@@ -62,8 +62,8 @@ def alarm():
 @main.route("/facialrecognition", methods=['GET', 'POST'])
 @register_login
 def facial():
-
     return render_template("facial.html", title="Facial Recognition", name=session['name'].title())
+
 
 @main.route('/api/v1/alarm', methods=['GET'])
 @register_login
@@ -108,23 +108,57 @@ def realtime_light_data():
 @main.route('/api/v1/lightValueForChart', methods=['GET'])
 @register_login
 def light_data_chart():
-
-    light_data = json.loads(db_access.retrieve_lights_for_chart())
+    db_access = DynamoDBEngine()
+    light_data = db_access.retrieve_light_data_last_10()
 
     table_data_dict = dict()
     table_data_dict["data"] = [i['light_value'] for i in light_data]
-    table_data_dict["labels"] = [i['datetime_value'] for i in light_data]
+    table_data_dict["labels"] = [i['date_time'] for i in light_data]
 
     return str(table_data_dict)
 
 @main.route("/api/v1/lightValueForDatatable", methods=['GET'])
 @register_login
 def light_data_datatable():
-
+    db_access = DynamoDBEngine()
     datatable_dict = dict()
-    datatable_dict["data"] = json.loads(db_access.retrieve_lights_for_table())
+    datatable_dict["data"] = db_access.retrieve_light_data_all()
 
     return jsonify(datatable_dict)
+
+@main.route('/api/v1/tempValueForChart', methods=['GET'])
+@register_login
+def temp_data_chart():
+    db_access = DynamoDBEngine()
+    dht11_data = db_access.retrieve_dht11_data_last_10()
+
+    table_data_dict = dict()
+    table_data_dict["data"] = [i['temperature'] for i in dht11_data]
+    table_data_dict["labels"] = [i['date_time'] for i in dht11_data]
+
+    return str(table_data_dict)
+
+@main.route('/api/v1/humidityValueForChart', methods=['GET'])
+@register_login
+def humidity_data_chart():
+    db_access = DynamoDBEngine()
+    dht11_data = db_access.retrieve_dht11_data_last_10()
+
+    table_data_dict = dict()
+    table_data_dict["data"] = [i['humidity'] for i in dht11_data]
+    table_data_dict["labels"] = [i['date_time'] for i in dht11_data]
+
+    return str(table_data_dict)
+
+@main.route("/api/v1/dht11ValueForDatatable", methods=['GET'])
+@register_login
+def dht11_data_datatable():
+    db_access = DynamoDBEngine()
+    datatable_dict = dict()
+    datatable_dict["data"] = db_access.retrieve_dht11_data_all()
+
+    return jsonify(datatable_dict)
+
 
 def gen(camera):
     """Video streaming generator function."""
@@ -139,16 +173,3 @@ def video_feed():
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
     
-# Threadding
-
-t1 = Thread(target = get_data)
-# t2 = Thread(target = store_data)
-t3 = Thread(target = get_dht_data)
-# t4 = Thread(target = start_tele_bot)
-# t5 = Thread(target = lcd)
-
-t1.start()
-# t2.start()
-t3.start()
-# t4.start()
-# t5.start()

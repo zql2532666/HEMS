@@ -3,7 +3,7 @@ import time as t
 import sys
 import os
 from DbAccess import *
-from AWSAccess import *
+from Mqtt import *
 import serial
 from threading import Thread
 import Adafruit_DHT
@@ -122,7 +122,7 @@ def run_dht11_sensor():
                     realtime_dict["humidity"] = humidity  # update realtime_dict
                     realtime_dict["temperature"] = temperature  # update realtime_dict
                     lock.release()
-                    sleep(5)
+                    sleep(2)
 
             except KeyboardInterrupt:
                 update = False

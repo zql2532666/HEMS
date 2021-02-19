@@ -2,11 +2,14 @@ import json, requests
 from functools import wraps
 from time import sleep
 from DbAccess import *
+from threading import Thread
+from raspberry import *
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, flash, send_file, session
 import os
 from auth import *
 from main import *
+from DynamoDB import *
 
 app = Flask(__name__,
             static_url_path='', 
@@ -20,7 +23,7 @@ app.config['SECRET_KEY'] = b'_5#y2L"F4Q8z\n\xec]/'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialise Database
-db_access = DbAccess()
+db_access = DynamoDBEngine()
 
 # For testing purposes with jinja. Remove later
 # Usage: {{ mdebug("whatever to print here") }}
@@ -59,6 +62,12 @@ if __name__ == "__main__":
 
         # blueprint for non-auth parts of app
         app.register_blueprint(main)
+
+        # threads for the sensors
+        dht11_thread = Thread(target=run_dht11_sensor)
+        light_thread = Thread(target=run_light_sensor)
+        dht11_thread.start()
+        light_thread.start()
 
         # server connections
         http_server = WSGIServer(('0.0.0.0', 5000), app)
