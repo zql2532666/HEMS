@@ -20,7 +20,7 @@ def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    user = json.loads(db_access.retrieve_user_by_email(email))
+    user = db_access.retrieve_user_by_email(email)
 
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
@@ -47,7 +47,7 @@ def signup_post():
     name = request.form.get('name')
     password = request.form.get('password')
 
-    user = json.loads(db_access.retrieve_user_by_email(email))
+    user = db_access.retrieve_user_by_email(email)
     if len(user) == 1: # if a user is found, we want to redirect back to signup page so user can try again
         flash(u'Email address already exists', 'danger')
         return redirect(url_for('auth.signup'))
