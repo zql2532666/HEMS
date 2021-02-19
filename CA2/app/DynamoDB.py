@@ -72,6 +72,4 @@ class DynamoDBEngine:
         )
         print(response)
 
-db_engine = DynamoDBEngine()
-db_engine.insert_new_user("penis@mail.com","dick suck", "fuck iot")
     
