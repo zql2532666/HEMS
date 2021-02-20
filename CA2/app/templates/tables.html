@@ -67,29 +67,7 @@
     </div>
     <!-- /.card -->
 
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">
-          <i class="fas fa-database"></i>
-          Humidity Database
-        </h3>
-        <button id="updateHumidityBtn" class="float-right btn btn-info">
-          Update
-        </button>
-      </div>
-      <!-- /.card-header -->
-      <div class="card-body">
-        <table id="humidity-table" class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Datetime</th>
-              <th>Humidity</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <!-- /.card-body -->
-    </div>
+   
     <!-- /.card -->
 
   </section>
@@ -163,9 +141,9 @@
 
   ////////////////////////////////////////////////////////////////////////////////// Temperature table ///////////////////////////////////////////////////////////////////////////////////////////
 
-  var temperatureTable;
+  var dht11Table;
   $(function () {
-    temperatureTable = $('#dht11-table').DataTable({
+    dht11Table = $('#dht11-table').DataTable({
       "ordering": true,
       "responsive": true,
       "autoWidth": false,
@@ -184,7 +162,7 @@
   $("#updateDHT11Btn").click(
     function () {
       //updateDatatable();
-      temperatureTable.ajax.reload(null, false);
+      dht11Table.ajax.reload(null, false);
     }
   );
 
