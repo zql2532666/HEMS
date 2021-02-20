@@ -7,9 +7,6 @@ import random
 from configparser import ConfigParser
 import os 
 
-# test imports for sensors, will remove
-# import Adafruit_DHT
-# import serial
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 config = ConfigParser()
@@ -24,6 +21,8 @@ PRIVATE_KEY_PATH = config['AWS']['PRIVATE_KEY_PATH']
 MQTT_PORT = int(config['AWS']['MQTT_PORT'])
 DHT11_TOPIC = config['AWS']['DHT11_TOPIC']
 LIGHT_TOPIC = config['AWS']['LIGHT_TOPIC']
+FACIAL_RECOGNITION_TOPIC = config['AWS']['FACIAL_RECOGNITION_TOPIC']
+
 
 class MQTTPublisher:
 
@@ -61,3 +60,29 @@ class MQTTPublisher:
         light_data['light_value'] = light_value
         result_value = self.client.publish(LIGHT_TOPIC, json.dumps(light_data), 1)  # Returns True if the publish request has been sent to aws broker. False if the request did not reach
         return result_value
+
+
+    def publish_facial_recognition_data(self, image_path, access):
+        facial_recognition_data = dict()
+        facial_recognition_data['device_id'] = DEVICE_ID
+        facial_recognition_data['date_time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        facial_recognition_data['device_name'] = DEVICE_NAME
+        facial_recognition_data['image_path'] = image_path
+        facial_recognition_data['access'] = access
+        result_value = self.client.publish(FACIAL_RECOGNITION_TOPIC, json.dumps(light_data), 1)  # Returns True if the publish request has been sent to aws broker. False if the request did not reach
+        return result_value
+
+    
+
+
+image_path = "detection_images/RONGTAO_PI/2020-02-20 13:54:00.jpg"
+access = "aaron"
+
+mqtt_publisher = MQTTPublisher()
+result_value = mqtt_publisher.publish_facial_recognition_data(image_path, access)
+print(result_value)
+
+
+
+
+    
