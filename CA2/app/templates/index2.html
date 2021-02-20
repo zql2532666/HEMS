@@ -129,33 +129,6 @@
               </div><!-- /.card-body -->
             </div>
             <!-- /.card -->
-
-            <!-- TO DO List -->
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-database"></i>
-                  Lights Database
-                </h3>
-                <button id="updateBtn" class="float-right btn btn-info">
-                  Update
-                </button>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>id</th>
-                      <th>Datetime</th>
-                      <th>Light Intensity</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
           </section>
           <!-- /.Left col -->
         </div>
@@ -182,6 +155,10 @@
   <script>
     $(function () {
       getLEDStatus();
+      updateLightChart();
+      updateTemperatureChart();
+      updateHumidityChart();
+      
       setInterval(function(){
         getRealTimeData();
         getLEDStatus();
@@ -242,12 +219,6 @@
         yAxes: [{
           gridLines : {
             display : false,
-          },
-          ticks: {
-            beginAtZero: false,
-            steps: 10,
-            stepValue: 5,
-            max: 800
           }
         }]
       }
