@@ -170,9 +170,11 @@
           getLEDStatus();
         }, 2000);
 
-        setInterval(
-        updateAllCharts   // updates the graphs every 30 seconds
-        , 1000 * 5);
+        setInterval( function(){
+          updateLightChart();    
+          updateTemperatureChart();
+          updateHumidityChart();
+        }, 1000 * 5);
       }
     
     );
@@ -441,12 +443,6 @@
     );
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    function updateAllCharts(){
-      updateLightChart();    
-      updateTemperatureChart();
-      updateHumidityChart();
-    }
-
     $(function() {
       $('#toggle-event').change(function() {
         $.ajax({
@@ -459,7 +455,6 @@
       })
     })
 
-    $("#renderBtn").click();
     getRealTimeData();
   </script>
 {% endblock %}
