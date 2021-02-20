@@ -115,4 +115,4 @@ def test_queries():
     # db.insert_new_user("test@mail.com","test",'test')
     db.retrieve_facial_recog_data_all()
 
-test_queries()
+# test_queries()
