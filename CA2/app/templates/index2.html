@@ -83,7 +83,7 @@
               </div><!-- /.card-header -->
               <div class="card-body">
                 <!-- Morris chart - Sales -->
-                <div class="chart" style="position: relative; height: 300px;">
+                <div class="chart" id="lightChart" style="position: relative; height: 300px;">
                   <canvas id="light-chart" height="300" style="height: 300px;"></canvas>                         
                 </div>
               </div><!-- /.card-body -->
@@ -103,7 +103,7 @@
               </div><!-- /.card-header -->
               <div class="card-body">
                 <!-- Morris chart - Sales -->
-                <div class="chart" style="position: relative; height: 300px;">
+                <div class="chart" id="temperatureChart" style="position: relative; height: 300px;">
                   <canvas id="temperature-chart" height="300" style="height: 300px;"></canvas>                         
                 </div>
               </div><!-- /.card-body -->
@@ -123,7 +123,7 @@
               </div><!-- /.card-header -->
               <div class="card-body">
                 <!-- Morris chart - Sales -->
-                <div class="chart" style="position: relative; height: 300px;">
+                <div class="chart" id="humidityChart" style="position: relative; height: 300px;">
                   <canvas id="humidity-chart" height="300" style="height: 300px;"></canvas>                         
                 </div>
               </div><!-- /.card-body -->
@@ -202,6 +202,8 @@
     }
 
 //////////////////////////////////////////////////////// LIGHT CHART //////////////////////////////////////////////////////////////////////
+    var lightChart;
+    
     var lightChartOptions = {
       maintainAspectRatio : false,
       responsive : true,
@@ -224,8 +226,8 @@
     }
 
     function renderLightChart(data, labels) {
-        var ctx = document.getElementById("light-chart").getContext('2d');
-        var myChart = new Chart(ctx, {
+        var ctx1 = document.getElementById("light-chart").getContext('2d');
+        lightChart = new Chart(ctx1, {
             type: 'line',
             data: {
                 labels: labels,
@@ -247,6 +249,10 @@
     function updateLightChart() {
       var data = []
       var labels = []
+
+      lightChart.destroy();
+      $("canvas#light-chart").remove();
+      $("div#lightChart").append('<canvas id="light-chart" height="300" style="height: 300px;"></canvas>');
 
       $.ajax({
         url: '/api/v1/lightValueForChart',
@@ -276,6 +282,8 @@
 
 
 ///////////////////////////////////////////////////////////////// TEMP CHART //////////////////////////////////////////////////////////
+    var temperatureChart;
+
     var temperatureChartOptions = {
       maintainAspectRatio : false,
       responsive : true,
@@ -297,8 +305,8 @@
       }
     }
     function renderTemperatureChart(data, labels) {
-      var ctx = document.getElementById("temperature-chart").getContext('2d');
-      var myChart = new Chart(ctx, {
+      var ctx2 = document.getElementById("temperature-chart").getContext('2d');
+      temperatureChart = new Chart(ctx2, {
           type: 'line',
           data: {
               labels: labels,
@@ -320,6 +328,10 @@
     function updateTemperatureChart() {
       var data = []
       var labels = []
+
+      temperatureChart.destroy();
+      $("temperature-chart").remove();
+      $("div#temperatureChart").append('<canvas id="temperature-chart" height="300" style="height: 300px;"></canvas>');
 
       $.ajax({
         url: '/api/v1/tempValueForChart',
@@ -348,6 +360,8 @@
 
 
 ///////////////////////////////////////////////////////////// Humidity Chart //////////////////////////////////////////////////////////////////
+    var humidityChart;
+
     var humidityChartOptions = {
       maintainAspectRatio : false,
       responsive : true,
@@ -370,8 +384,8 @@
     }
 
     function renderHumidityChart(data, labels) {
-      var ctx = document.getElementById("humidity-chart").getContext('2d');
-      var myChart = new Chart(ctx, {
+      var ctx3 = document.getElementById("humidity-chart").getContext('2d');
+      humidityChart = new Chart(ctx3, {
           type: 'line',
           data: {
               labels: labels,
@@ -394,6 +408,10 @@
     function updateHumidityChart() {
       var data = []
       var labels = []
+
+      humidityChart.destroy();
+      $("humidity-chart").remove();
+      $("div#humidityChart").append('<canvas id="humidity-chart" height="300" style="height: 300px;"></canvas>');
 
       $.ajax({
         url: '/api/v1/humidityValueForChart',
