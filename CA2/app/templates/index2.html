@@ -153,18 +153,26 @@
   <script src="dist/js/pages/dashboard2.js"></script>
 
   <script>
-    $(function () {
-      getLEDStatus();
-      updateLightChart();
-      updateTemperatureChart();
-      updateHumidityChart();
-      
-      setInterval(function(){
-        getRealTimeData();
+    $(document).ready(
+      function () {
         getLEDStatus();
-        //updateLightChart();  // real time update for light chart 
-      }, 2000);
-    });
+        updateLightChart();
+        updateTemperatureChart();
+        updateHumidityChart();
+  
+        setInterval(function(){
+          getRealTimeData();
+          getLEDStatus();
+        }, 2000);
+
+        setInterval(function(){   // updates the graphs every 30 seconds
+          updateLightChart();    
+          updateTemperatureChart();
+          updateHumidityChart();
+        }, 1000 * 30);
+      }
+    
+    );
 
     function getLEDStatus(){
       $.ajax({
@@ -231,9 +239,14 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'This week',
+                    label: 'Light',
                     data: data,
-                    fill: false
+                    fill: false,
+                    backgroundColor: 'rgba(41, 241, 195, 1)',
+                    borderColor: [
+                            'rgba(255,99,132,1)'
+                        ],
+                    borderWidth: 1
                 }]
             },
             options: lightChartOptions
@@ -299,9 +312,14 @@
           data: {
               labels: labels,
               datasets: [{
-                  label: 'This week',
+                  label: 'Temperature (Degree Celcius)',
                   data: data,
-                  fill: false
+                  fill: false,
+                  backgroundColor: 'rgba(255,99,132,1)',
+                  borderColor: [
+                      'rgba(41, 241, 195, 1)'
+                  ],
+                  borderWidth: 1
               }]
           },
           options: temperatureChartOptions
@@ -367,9 +385,17 @@
           data: {
               labels: labels,
               datasets: [{
-                  label: 'This week',
+                  label: 'Humidity (%)',
                   data: data,
-                  fill: false
+                  fill: false,
+                  backgroundColor: 'rgba(190, 144, 212,1)',
+                  borderColor: [
+                            //'rgba(255,99,132,1)',
+                            // 'rgba(41, 241, 195, 1)',
+                            'rgba(89, 171, 227, 1)'
+
+                        ],
+                  borderWidth: 1
               }]
           },
           options: humidityChartOptions
