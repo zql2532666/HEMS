@@ -161,9 +161,9 @@
     $(document).ready(
       function () {
         getLEDStatus();
-        updateLightChart();
-        updateTemperatureChart();
-        updateHumidityChart();
+        renderLightChart();
+        renderTemperatureChart();
+        renderHumidityChart();
   
         setInterval(function(){
           getRealTimeData();
