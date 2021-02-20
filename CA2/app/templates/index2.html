@@ -153,6 +153,11 @@
   <script src="dist/js/pages/dashboard2.js"></script>
 
   <script>
+    var lightChart;
+    var temperatureChart;
+    var humidityChart;
+
+
     $(document).ready(
       function () {
         getLEDStatus();
@@ -165,11 +170,9 @@
           getLEDStatus();
         }, 2000);
 
-        setInterval(function(){   // updates the graphs every 30 seconds
-          updateLightChart();    
-          updateTemperatureChart();
-          updateHumidityChart();
-        }, 1000 * 5);
+        setInterval(
+        updateAllCharts   // updates the graphs every 30 seconds
+        , 1000 * 5);
       }
     
     );
@@ -201,8 +204,9 @@
       });
     }
 
+    
 //////////////////////////////////////////////////////// LIGHT CHART //////////////////////////////////////////////////////////////////////
-    var lightChart;
+    
     
     var lightChartOptions = {
       maintainAspectRatio : false,
@@ -282,7 +286,7 @@
 
 
 ///////////////////////////////////////////////////////////////// TEMP CHART //////////////////////////////////////////////////////////
-    var temperatureChart;
+    
 
     var temperatureChartOptions = {
       maintainAspectRatio : false,
@@ -360,7 +364,7 @@
 
 
 ///////////////////////////////////////////////////////////// Humidity Chart //////////////////////////////////////////////////////////////////
-    var humidityChart;
+    
 
     var humidityChartOptions = {
       maintainAspectRatio : false,
@@ -436,6 +440,12 @@
       updateHumidityChart
     );
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function updateAllCharts(){
+      updateLightChart();    
+      updateTemperatureChart();
+      updateHumidityChart();
+    }
 
     $(function() {
       $('#toggle-event').change(function() {
