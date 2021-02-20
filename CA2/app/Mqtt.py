@@ -62,10 +62,10 @@ class MQTTPublisher:
         return result_value
 
 
-    def publish_facial_recognition_data(self, image_path, access):
+    def publish_facial_recognition_data(self, date_time, image_path, access):
         facial_recognition_data = dict()
         facial_recognition_data['device_id'] = DEVICE_ID
-        facial_recognition_data['date_time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        facial_recognition_data['date_time'] = date_time
         facial_recognition_data['device_name'] = DEVICE_NAME
         facial_recognition_data['image_path'] = image_path
         facial_recognition_data['access'] = access
