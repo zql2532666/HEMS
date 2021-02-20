@@ -48,8 +48,8 @@ class DynamoDBEngine:
         items = response["Items"]
         num_of_rows = 10 #limit to last 10 rows
         # check if the len of items is more than 10, if it is take the last 10 rows
-        print("before slicing:")
-        print(items)
+        # print("before slicing:")
+        # print(items)
         if len(items) > 10:
             items= items[-num_of_rows:]
             # items = items[::-1]
