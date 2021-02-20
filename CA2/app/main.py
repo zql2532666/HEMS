@@ -64,6 +64,12 @@ def facial():
 
     return render_template("facial.html", title="Facial Recognition", name=session['name'].title())
 
+@main.route("/api/v1/buzzer", methods=['GET'])
+@register_login
+def buzz():
+    ring()
+    return jsonify({'success': True}), 201
+
 @main.route("/tables", methods=['GET', 'POST'])
 @register_login
 def tables():
