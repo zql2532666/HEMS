@@ -1,37 +1,41 @@
 {% from "macros.html" import nav_link with context %}
 
 <!-- Brand Logo -->
-  <a href="index" class="brand-link">
-    <img style="margin-top:1px" src="/dist/img/AdminLTELogo.png" alt="adminlte" class="brand-image" style="opacity: .8">
-    <span class="brand-text font-weight-light">AdminLTE 3</span>
-  </a>
+<a href="index" class="brand-link">
+  <img style="margin-top:1px" src="/dist/img/AdminLTELogo.png" alt="adminlte" class="brand-image" style="opacity: .8">
+  <span class="brand-text font-weight-light">AdminLTE 3</span>
+</a>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <!-- Sidebar user panel (comment for now. do after password login) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="/logout" class="d-block">{{name}}</a>
-      </div>
+<!-- Sidebar -->
+<div class="sidebar">
+  <!-- Sidebar user panel (comment for now. do after password login) -->
+  <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="image">
+      <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
     </div>
-
-    <!-- Sidebar Menu -->
-    <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item">
-          {{ nav_link('main.index2', 'Dashboard', 'fas fa-tachometer-alt') }}
-        </li>
-        <li class="nav-item">
-          {{ nav_link('main.facial', 'Facial Recognition', 'far fa-laugh') }}
-        </li>
-        <li class="nav-item">
-          {{ nav_link('main.alarm', 'Alarm', 'fas fa-bell') }}
-        </li>
-      </ul>
-    </nav>
-    <!-- /.sidebar-menu -->
+    <div class="info">
+      <a href="/logout" class="d-block">{{name}}</a>
+    </div>
   </div>
-  <!-- /.sidebar -->
+
+  <!-- Sidebar Menu -->
+  <nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu"
+      data-accordion="false">
+      <li class="nav-item">
+        {{ nav_link('main.index2', 'Dashboard', 'fas fa-tachometer-alt') }}
+      </li>
+      <li class="nav-item">
+        {{ nav_link('main.facial', 'Facial Recognition', 'far fa-laugh') }}
+      </li>
+      <li class="nav-item">
+        {{ nav_link('main.alarm', 'Alarm', 'fas fa-bell') }}
+      </li>
+      <li class="nav-item">
+        {{ nav_link('main.tables', 'Tables', 'fas fa-database') }}
+      </li>
+    </ul>
+  </nav>
+  <!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
