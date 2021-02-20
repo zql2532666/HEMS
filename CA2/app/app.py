@@ -102,8 +102,8 @@ if __name__ == "__main__":
         # threads for the sensors
         dht11_thread = Thread(target=run_dht11_sensor)
         light_thread = Thread(target=run_light_sensor)
-        # dht11_thread.start()
-        # light_thread.start()
+        dht11_thread.start()
+        light_thread.start()
 
         # server connections
         http_server = WSGIServer(('0.0.0.0', 5000), app)
