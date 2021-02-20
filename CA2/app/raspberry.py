@@ -51,13 +51,11 @@ realtime_dict = {
 
 gobal_dict = { "alarm": None, "rang": False }
 
-
-directory = '/home/pi/Desktop/rekognition' #folder name on your raspberry pi
-P=PiCamera()
-collectionId='mycollection' #collection name
-rek_client=boto3.client('rekognition', region_name='us-east-1')
-
 def analyse_face():
+    directory = '/home/pi/Desktop/rekognition' #folder name on your raspberry pi
+    P=PiCamera()
+    collectionId='mycollection' #collection name
+    rek_client=boto3.client('rekognition', region_name='us-east-1')
     for f in os.listdir(directory):
         os.remove(os.path.join(directory, f))
     milli = int(round(t.time() * 1000))
