@@ -28,7 +28,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">
-                  Live Video Feed
+                  Access Checker
                 </h3>
               </div><!-- /.card-header -->
               <div class="card-body" style="text-align: center;">
@@ -48,7 +48,7 @@
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="fas fa-database"></i>
-                  Lights Database
+                  Access Logs
                 </h3>
                 <button id="updateFacialBtn" class="float-right btn btn-info">
                   Update
@@ -85,7 +85,15 @@
         return jsdatetime.toLocaleString();
       },
       image: function (data, type, row, meta) {
-        return '<img src="/dist/img/avatar.png" alt="User Image">'
+        return '<h5 style="text-align:center"><img src="' + data + '" alt="User Image" width="40%" height="auto"></h5>'
+      },
+      access: function (data, type, row, meta) {
+        var button = "";
+        if(data == "Access Denied") {
+          return '<h5><span style="width:100%" class="right badge badge-danger">Access Denied</span></h5>'
+        }else {
+          return '<h5><span style="width:100%" class="right badge badge-success">' + data + '</span></h5>'
+        }
       }
     };
     var facialTable;
@@ -97,8 +105,8 @@
         "ajax": "/api/v1/facialRecogValueForDatatable",
         "columns": [
           { "data": "date_time"},
-          { "data": "access" },
-          {"data": "image_path", "render":CustomRenders.image},
+          { "data": "access", "render":CustomRenders.access },
+          { "data": "image_path", "render":CustomRenders.image, "className": "dt-body-center", "width": '70%' },
         ],
         "order": [[0, "desc"]]
       });

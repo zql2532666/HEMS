@@ -12,10 +12,12 @@ import telepot
 from rpi_lcd import LCD
 from threading import Lock
 from datetime import datetime as dt
+import datetime as datetime
 from picamera import PiCamera
 import boto3
 import base64
 from signal import pause
+import uuid
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 config = ConfigParser()
@@ -57,14 +59,16 @@ realtime_dict = {
 gobal_dict = { "alarm": None, "rang": False }
 
 directory = basedir + '/static/detection_images/' + RASPBERRY_PI_DEVICE_NAME #folder name on your raspberry pi
-os.makedirs(directory) 
+access_directory = '/detection_images/' + RASPBERRY_PI_DEVICE_NAME + "/" #folder name on your raspberry pi
+os.makedirs(directory, exist_ok=True) 
 P=PiCamera()
 collectionId='mycollection' #collection name
 rek_client=boto3.client('rekognition', region_name='us-east-1')
 
 def analyse_face():
-    milli = int(round(t.time() * 1000))
-    image = '{}/image_{}.jpg'.format(directory,milli)
+    access = ""
+    file_name = 'image_{}.jpg'.format(uuid.uuid4())
+    image = '{}/{}'.format(directory,file_name)
     P.capture(image) #capture an image
     print('captured '+image)
     with open(image, 'rb') as image:
@@ -74,18 +78,24 @@ def analyse_face():
                 print('Hello, ',match_response['FaceMatches'][0]['Face']['ExternalImageId'])
                 print('Similarity: ',match_response['FaceMatches'][0]['Similarity'])
                 print('Confidence: ',match_response['FaceMatches'][0]['Face']['Confidence'])
+                mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, match_response['FaceMatches'][0]['Face']['ExternalImageId'])
                 return 'Hello, ' + match_response['FaceMatches'][0]['Face']['ExternalImageId']
             else:
                 print('No faces matched')
+                mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, "Access Denied")
                 return "NA"
         except:
             print('No face detected')
+            mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, "Access Denied")
             return "NA"
+
+    mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, "Access Denied")
     return "NA"
 
 def analyse_face_for_physical_button():
-    milli = int(round(t.time() * 1000))
-    image = '{}/image_{}.jpg'.format(directory,milli)
+    access = ""
+    file_name = 'image_{}.jpg'.format(uuid.uuid4())
+    image = '{}/{}'.format(directory,file_name)
     P.capture(image) #capture an image
     print('captured '+image)
     with open(image, 'rb') as image:
@@ -95,14 +105,19 @@ def analyse_face_for_physical_button():
                 print('Hello, ',match_response['FaceMatches'][0]['Face']['ExternalImageId'])
                 print('Similarity: ',match_response['FaceMatches'][0]['Similarity'])
                 print('Confidence: ',match_response['FaceMatches'][0]['Face']['Confidence'])
+                mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, match_response['FaceMatches'][0]['Face']['ExternalImageId'])
                 ring()
                 return 'Hello, ' + match_response['FaceMatches'][0]['Face']['ExternalImageId']
             else:
                 print('No faces matched')
+                mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, "Access Denied")
                 return "NA"
         except:
             print('No face detected')
+            mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, "Access Denied")
             return "NA"
+
+    mqtt_publisher.publish_facial_recognition_data(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), access_directory + file_name, "Access Denied")
     return "NA"
 
 def ledOn():
