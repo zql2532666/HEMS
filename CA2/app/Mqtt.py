@@ -69,7 +69,7 @@ class MQTTPublisher:
         facial_recognition_data['device_name'] = DEVICE_NAME
         facial_recognition_data['image_path'] = image_path
         facial_recognition_data['access'] = access
-        result_value = self.client.publish(FACIAL_RECOGNITION_TOPIC, json.dumps(light_data), 1)  # Returns True if the publish request has been sent to aws broker. False if the request did not reach
+        result_value = self.client.publish(FACIAL_RECOGNITION_TOPIC, json.dumps(facial_recognition_data), 1)  # Returns True if the publish request has been sent to aws broker. False if the request did not reach
         return result_value
 
     
