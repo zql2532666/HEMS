@@ -193,19 +193,10 @@
         url: '/api/v1/realtimedata',
         type: 'GET',
         success: function(result) {
-          if (result.light == "-1") {
-            $('#light_value').html("Disconnected");
-          }else{
-            $('#light_value').html(result.light);
-          }
-
-          if (result.humidity == "-1") {
-            $('#temp-info').html("Disconnected");
-            $('#humid-info').html("Disconnected");
-          }else{
-            $('#humidity').html(result.humidity);
-            $('#temperature').html(result.temperature);
-          }
+          $('#light_value').html(result.light);
+          $('#humidity').html(result.humidity);
+          $('#temperature').html(result.temperature);
+          
         }
       });
     }
@@ -390,8 +381,6 @@
                   fill: false,
                   backgroundColor: 'rgba(190, 144, 212,1)',
                   borderColor: [
-                            //'rgba(255,99,132,1)',
-                            // 'rgba(41, 241, 195, 1)',
                             'rgba(89, 171, 227, 1)'
 
                         ],
