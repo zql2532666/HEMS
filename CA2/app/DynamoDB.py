@@ -8,16 +8,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 config = ConfigParser()
 config.read(os.path.join(basedir, 'config.conf'))
 
-DEVICE_ID = config['RASPBERRY-PI']['DEVICE_ID']
-DEVICE_NAME = config['RASPBERRY-PI']['DEVICE_NAME']
-AWS_HOST = config['AWS']['HOST']
-ROOT_CA_PATH = config['AWS']['ROOT_CA_PATH']
-CERTIFICATE_PATH =  config['AWS']['CERTIFICATE_PATH']
-PRIVATE_KEY_PATH = config['AWS']['PRIVATE_KEY_PATH']
-MQTT_PORT = int(config['AWS']['MQTT_PORT'])
-DHT11_TOPIC = config['AWS']['DHT11_TOPIC']
-LIGHT_TOPIC = config['AWS']['LIGHT_TOPIC']
-
 DHT11_TABLE = config['AWS']['DHT11_TABLE']
 LIGHT_TABLE = config['AWS']['LIGHT_TABLE']
 USER_TABLE = config['AWS']['USER_TABLE']
@@ -111,7 +101,7 @@ class DynamoDBEngine:
         items = response["Items"]
         items = items[::-1]
         items = jsonc.data_to_json(items)
-        # print(items)
+        print(items)
         return items        
 
 
@@ -125,4 +115,4 @@ def test_queries():
     # db.insert_new_user("test@mail.com","test",'test')
     db.retrieve_facial_recog_data_all()
 
-# test_queries()
+test_queries()
