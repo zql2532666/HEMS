@@ -51,11 +51,14 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body">
-        <table id="temperature-table" class="table table-bordered table-hover">
+        <table id="dht11-table" class="table table-bordered table-hover">
           <thead>
             <tr>
               <th>Datetime</th>
               <th>Temperature</th>
+              <th>Humidity</th>
+              <th>Device ID</th>
+              <th>Device Name</th>
             </tr>
           </thead>
         </table>
@@ -162,14 +165,17 @@
 
   var temperatureTable;
   $(function () {
-    temperatureTable = $('temperature-table').DataTable({
+    temperatureTable = $('dht11-table').DataTable({
       "ordering": true,
       "responsive": true,
       "autoWidth": false,
       "ajax": "/api/v1/dht11ValueForDatatable",
       "columns": [
         { "data": "date_time", "render": CustomRenders.dateTime },
-        { "data": "temperature" }
+        { "data": "temperature" },
+        {"data": "humidity"},
+        {"data": "device_id"},
+        {"data": "device_name"}
       ],
       "order": [[0, "desc"]]
     });
