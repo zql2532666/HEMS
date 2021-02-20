@@ -171,41 +171,17 @@
 
 
 
-////////////////////////////////////////////////////////////////////////////////// Humidity table ///////////////////////////////////////////////////////////////////////////////////////////
+$(document).ready(function () {
+  setInterval(function(){
+    dht11Table.ajax.reload(null, false);
+    lightTable.ajax.reload(null, false);
+  }, 1000 * 10)
 
-  /*
-    var HumidityTable;
-    $(function () {
-         HumidityTable = $('humidity-table').DataTable({
-        "ordering": true,
-        "responsive": true,
-        "autoWidth": false,
-        "ajax": "",
-        "columns": [
-          { "data": "id"},
-          { "data": "datetime_value", "render": CustomRenders.dateTime},
-          { "data": "light_value"}
-        ],
-        "columnDefs": [
-            {
-                "targets": [ 0 ],
-                "visible": false,
-                "searchable": false
-            }
-        ],
-        "order": [[ 0, "desc" ]]
-      });
-    });
-  
-    $("#updateHumidityBtn").click(
-    function () {
-      //updateDatatable();
-      HumidityTable.ajax.reload( null, false );
-    }
-    );
-  
-    */
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+});
+
+
+
+
 
 </script>
 {% endblock %}
