@@ -29,6 +29,8 @@
             <tr>
               <th>Datetime</th>
               <th>Light Intensity</th>
+              <th>Device ID</th>
+              <th>Device Name</th>
             </tr>
           </thead>
         </table>
@@ -140,7 +142,9 @@
       "ajax": "/api/v1/lightValueForDatatable",
       "columns": [
         { "data": "date_time", "render": CustomRenders.dateTime },
-        { "data": "light_value" }
+        { "data": "light_value" },
+        {"data": "device_id"},
+        {"data": "device_name"}
       ],
       "order": [[0, "desc"]]
     });
