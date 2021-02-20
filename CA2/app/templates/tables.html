@@ -172,6 +172,8 @@
 
 
 $(document).ready(function () {
+  dht11Table.ajax.reload(null, false);
+  lightTable.ajax.reload(null, false);
   setInterval(function(){
     dht11Table.ajax.reload(null, false);
     lightTable.ajax.reload(null, false);
