@@ -65,3 +65,65 @@ Main Bar  <br><br>
 
 ## 1.5 System Architecture
 ![Alt text](README-images/arch.png?raw=true) <br>
+
+# Section 2 Hardware requirements 
+## 2.1 Hardware checklist
+- Arduino
+- Raspberry Pi
+- PiCamera
+- Buzzer
+- DHT sensor
+- LED
+- LDR Sensor
+- Button
+- Two Breadboards
+- Three 10k Ohms resistor (For DHT11, LDR sensor and Button)
+- 330 Ohms resistor (for LED)
+
+## 2.2 Hardware setup instructions
+### 2.2.1 Connections for LDR to Arduino:
+
+![Alt text](README-images/LDR+Arduino-setup.png?raw=true)
+
+
+### 2.2.2 Connection for Arduino to Raspberry Pi:
+#### Make sure that the USB connector for the Arduino is connected to the **top left** USB port in the Raspberry Pi..
+![Alt text](README-images/Arduino-RPI-setup.png?raw=true)
+
+
+### 2.2.3 Connections for Button:
+
+![Alt text](README-images/button-setup.png?raw=true)
+
+
+### 2.2.4 Connections for LED:
+
+![Alt text](README-images/led-setup.png?raw=true)
+
+
+### 2.2.5 Connections for Buzzer:
+
+![Alt text](README-images/buzzer-setup.png?raw=true)
+
+
+### 2.2.6 Connections for DHT11 Sensor:
+
+![Alt text](README-images/dht11-setup.png?raw=true)
+
+
+## 2.2.7 Fritzing Diagram
+
+![Alt text](README-images/fritzing-diagram.jpg?raw=true)
+
+
+
+
+
+# Section 6 - References
+https://github.com/xbwei/data-analysis-aws/tree/master/facial-recognition-raspberry-pi
+
+https://www.youtube.com/watch?v=xFCK1-lYzqA
+
+https://docs.aws.amazon.com/rekognition/latest/dg/API_CompareFaces.html
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html
