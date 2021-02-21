@@ -2,13 +2,11 @@ from time import sleep, mktime
 import time as t
 import sys
 import os
-from DbAccess import *
 from Mqtt import *
 import serial
 from threading import Thread
 import Adafruit_DHT
 from gpiozero import LED, Buzzer, Button
-import telepot
 from rpi_lcd import LCD
 from threading import Lock
 from datetime import datetime as dt

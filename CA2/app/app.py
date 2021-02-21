@@ -1,7 +1,6 @@
 import json, requests
 from functools import wraps
 from time import sleep
-from DbAccess import *
 from threading import Thread
 from raspberry import *
 from gevent.pywsgi import WSGIServer
