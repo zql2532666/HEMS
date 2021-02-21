@@ -136,13 +136,9 @@ Main Bar  <br><br>
 
 1. Login to your AWS Educate account and click on “Account Details”.
 
-2. Click “Show” beside AWS CLI:
+2. Copy over the AWS Credentials to clipboard
 
-    ![Alt text](README-images/aws_cli_show.png?raw=true)
-
-3. Copy over the credentials:
-
-    ![Alt text](README-images/aws_credentials.png?raw=true)
+    ![Alt text](README-images/aws_creds.png?raw=true)
 
 4. On both the Raspberry Pi and the EC2 instance, run the following commands:
 ```
