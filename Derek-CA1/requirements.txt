@@ -1,8 +1,0 @@
-gpiozero
-Adafruit_Python_DHT
-twilio
-pyserial
-Flask
-gevent
-mysql-connector-python  
-mysql-connector
