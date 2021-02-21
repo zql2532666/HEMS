@@ -151,7 +151,7 @@ vi ~/.aws/credentials
 ```
 5. Paste the credentials into the text editor and save. After saving, exit the terminal
 
-6. Go to cloned folder and run the following command to start the server:
+6. Go to the cloned folder and run the following command to start the server:
 ```
 python3 app/app.py
 ``` 
