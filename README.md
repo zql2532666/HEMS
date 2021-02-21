@@ -117,6 +117,46 @@ Main Bar  <br><br>
 
 
 
+# Section 4 - Source Code Set Up
+
+1. Fork the current repository and issue the "git clone" command, to clone the git repository to your raspberry pi. 
+
+2. Place the certificates downloaded in Section 3 step 8 in "CA2/app/aws_certs"
+
+3. In config.conf, change the configuration parameters if necessary. Configuration needed for sensors, raspberry pi and aws can be set here before running the program
+
+    ![Alt text](README-images/config_file.png?raw=true)
+
+4. Directory structure of the code base should be as follows:
+
+    ![Alt text](README-images/dir_struct.png?raw=true)
+
+
+# Section 5 - Run Program
+
+1. Login to your AWS Educate account and click on “Account Details”.
+
+2. Click “Show” beside AWS CLI:
+
+    ![Alt text](README-images/aws_cli_show.png?raw=true)
+
+3. Copy over the credentials:
+
+    ![Alt text](README-images/aws_credentials.png?raw=true)
+
+4. On both the Raspberry Pi and the EC2 instance, run the following commands:
+```
+rm ~/.aws/credentials
+vi ~/.aws/credentials
+```
+5. Paste the credentials into the text editor and save. After saving, exit the terminal
+
+6. Go to cloned folder and run the following command to start the server:
+```
+python3 app/app.py
+``` 
+
+
 
 
 # Section 6 - References
