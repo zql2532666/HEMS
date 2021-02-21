@@ -158,7 +158,6 @@ def run_light_sensor():
 
                     realtime_dict["light"] = light_value  # update realtime_dict
                     lock.release()
-                    sleep(5)
 
             except KeyboardInterrupt:
                 update = False
