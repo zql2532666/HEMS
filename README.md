@@ -87,7 +87,7 @@ Main Bar  <br><br>
 
 
 ### 2.2.2 Connection for Arduino to Raspberry Pi:
-#### Make sure that the USB connector for the Arduino is connected to the **top left** USB port in the Raspberry Pi..
+#### Make sure that the USB connector for the Arduino is connected to the **top left** USB port in the Raspberry Pi
 ![Alt text](README-images/Arduino-RPI-setup.png?raw=true)
 
 
@@ -117,22 +117,27 @@ Main Bar  <br><br>
 
 
 
-# Section 4 - Source Code Set Up
+# Section 3 - Source Code Set Up
 
 1. Fork the current repository and issue the "git clone" command, to clone the git repository to your raspberry pi. 
 
-2. Place the certificates downloaded in Section 3 step 8 in "CA2/app/aws_certs"
+2. Place the AWS certificate, private key and root CA in "CA2/app/aws_certs"
 
 3. In config.conf, change the configuration parameters if necessary. Configuration needed for sensors, raspberry pi and aws can be set here before running the program
 
     ![Alt text](README-images/config_file.png?raw=true)
 
-4. Directory structure of the code base should be as follows:
+4. Run the following command to install all the required python dependencies to run the application.
+```
+pip3 install -r requirements.txt
+```
+
+5. Directory structure of the code base should be as follows:
 
     ![Alt text](README-images/dir_struct.png?raw=true)
 
 
-# Section 5 - Run Program
+# Section 4 - Run Program
 
 1. Login to your AWS Educate account and click on “Account Details”.
 
