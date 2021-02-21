@@ -1,14 +1,67 @@
-# **ST0324: INTERNET OF THINGS**
-# **CA2 Public Tutorial**
-# **Team Notoriously Talkative Renegades**
+# ST0324: INTERNET OF THINGS
+# CA2 Public Tutorial
+# Team Notoriously Talkative Renegades
 
-## **Members**:
+## Members:
 Thein Than Zaw [1827905] <br>
 Zhang Rongtao [1827893] <br>
 Aaron Poh Ji Teck [1828092] <br>
 
-# Monitor Anytime - Server Environment Monitoring System
+# Server Environment Monitoring System
 
 # Section 1 - Overview of project
 
+## 1.1 What the application is about
+The application is named Server Environment Monitoring System. It was intended to monitor the physical environment of a server room and display data such as , temperature, humidity and light. The application is also able to perform facial detection and recognition after taking in the input from the raspberry pi camera. The face detected is then compared against the S3 Bucket images to check if the face detected has access to the server room. 
 
+The app’s target audience are small and medium businesses who have a server room set up in their offices. The app gives the users and an easy way to monitor the environment conditions in the server rooms. 
+
+## 1.2 Final RPI Set-up
+![Alt text](README-images/RPI-Setup.png?raw=true)
+
+## 1.3 Web Application Screenshots
+![Alt text](README-images/realtime_sensor.png?raw=true)
+Dashboard – Real Time Sensor Values & Controlling of LED <br><br>
+
+![Alt text](README-images/light_graph.png?raw=true)
+Dashboard – Light Graph <br><br>
+
+![Alt text](README-images/temperature_graph.png?raw=true)
+Dashboard – Temperature Graph <br><br>
+
+![Alt text](README-images/humidity_graph.png?raw=true)
+Dashboard – Humidity Graph <br><br>
+
+![Alt text](README-images/light_table.png?raw=true)
+Tables Page  – Light Table <br><br>
+
+![Alt text](README-images/temperature_humidity_table.png?raw=true)
+Tables Page  – Temperature & Humidity Table <br><br>
+
+![Alt text](README-images/access_checker.png?raw=true)
+Facial Recognition Page – Acess Checker <br><br>
+
+![Alt text](README-images/access_log_1.png?raw=true)
+![Alt text](README-images/access_log_2.png?raw=true)
+Facial Recognition Page – Acess Logs <br><br>
+
+![Alt text](README-images/login.png?raw=true)
+Login Page <br><br>
+
+![Alt text](README-images/register.png?raw=true)
+Register New User Page <br><br>
+
+![Alt text](README-images/side_bar_hidden.png?raw=true) <br>
+Side Bar – Hidden <br><br>
+
+![Alt text](README-images/side_bar_revealed.png?raw=true) <br>
+Side Bar – Revealed <br><br>
+
+![Alt text](README-images/main_bar.png?raw=true) <br>
+Main Bar  <br><br>
+
+## 1.4 Email Notification Example
+![Alt text](README-images/email.png?raw=true) <br>
+
+## 1.5 System Architecture
+![Alt text](README-images/arch.png?raw=true) <br>
