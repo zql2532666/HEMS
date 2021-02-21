@@ -160,7 +160,7 @@ python3 app/app.py
 
 
 
-# Section 6 - References
+# Section 5 - References
 https://github.com/xbwei/data-analysis-aws/tree/master/facial-recognition-raspberry-pi
 
 https://www.youtube.com/watch?v=xFCK1-lYzqA
