@@ -4,8 +4,7 @@
 
 ## Members:
 Thein Than Zaw [1827905] <br>
-Zhang Rongtao [1827893] <br>
-Aaron Poh Ji Teck [1828092] <br>
+
 
 # Server Environment Monitoring System
 
