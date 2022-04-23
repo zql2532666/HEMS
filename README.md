@@ -1,9 +1,7 @@
-# ST0324: INTERNET OF THINGS
-# CA2 Public Tutorial
-# Team Notoriously Talkative Renegades
-
-## Members:
-Thein Than Zaw [1827905] <br>
+## Authors
+Thein Than Zaw, Derek
+Zhang Rongtao
+Aaron Chen
 
 
 # Server Environment Monitoring System
