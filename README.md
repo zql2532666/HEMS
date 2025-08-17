@@ -1,8 +1,11 @@
 # IoT Home Environment Monitoring System 
 
 # Overview
-The application is named IoT Home Environment Monitoring System . It was intended to monitor the physical environment of a room and display data such as , temperature, humidity and light. The application is also able to perform facial detection and recognition after taking in the input from the raspberry pi camera. The face detected is then compared against the S3 Bucket images to check if the face detected has access to the server room. 
-The app’s target audience are small and medium businesses who have a server room set up in their offices. The app gives the users and an easy way to monitor the environment conditions in the server rooms. 
+HEMS is an IoT-based application designed to monitor and manage the physical conditions of indoor environments. It collects real-time sensor data—including temperature, humidity, and light levels—to help users track and maintain optimal environmental conditions.
+
+In addition to environmental monitoring, HEMS integrates facial detection and recognition using a Raspberry Pi camera. Captured faces are automatically compared against authorized personnel images stored in an AWS S3 bucket to control and verify access.
+
+The system is particularly targeted at small and medium-sized businesses that maintain on-site server rooms, offering them a cost-effective solution for both environmental monitoring and access control. With its easy-to-use interface and IoT-enabled features, HEMS provides an efficient way to ensure the safety and stability of critical IT infrastructure.
 
 ## 1.2 Final RPI Set-up
 ![Alt text](README-images/RPI-Setup.png?raw=true)
