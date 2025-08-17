@@ -1,7 +1,6 @@
 # IoT Home Environment Monitoring System 
 
-# Section 1 - Overview
-## 1.1 What the application is about
+# Overview
 The application is named IoT Home Environment Monitoring System . It was intended to monitor the physical environment of a room and display data such as , temperature, humidity and light. The application is also able to perform facial detection and recognition after taking in the input from the raspberry pi camera. The face detected is then compared against the S3 Bucket images to check if the face detected has access to the server room. 
 The app’s target audience are small and medium businesses who have a server room set up in their offices. The app gives the users and an easy way to monitor the environment conditions in the server rooms. 
 
